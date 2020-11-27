@@ -1,0 +1,24 @@
+{% extends "base.html" %}
+{% block title %}Зарегистрироваться{% endblock %}
+{% block content %}
+{# загружаем фильтр #}
+{% load user_filters %}
+
+<div class="row justify-content-center">
+    <div class="col-md-8 p-5">
+        <div class="card">
+            <div class="card-header bg-success"><b>Активация аккаунта прошла успешно!</b></div>
+            <div class="card-body">
+                <p class="card-text">
+                Поздравляем, {{ username }}! Ваш аккаунт активирован.
+                Спасибо за интерес к нашему сервису!
+                </p>
+
+                    </div>
+
+            </div> <!-- card body -->
+        </div> <!-- card -->
+    </div> <!-- col -->
+</div> <!-- row -->
+
+{% endblock %}
