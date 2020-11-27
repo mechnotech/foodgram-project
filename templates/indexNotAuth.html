@@ -10,22 +10,18 @@
     {% block css %}
     <link rel="stylesheet" href="{% static 'pages/index.css' %}">
     {% endblock %}
+    {% block scrypt %}
+    <script src="{% static 'js/config/config.js' %}"></script>
+    <script src="{% static 'js/components/MainCards.js' %}"></script>
+    <script src="{% static 'js/components/Purchases.js' %}"></script>
+    <script src="{% static 'js/components/CardList.js' %}"></script>
+    <script src="{% static 'js/components/Header.js' %}"></script>
+    <script src="{% static 'js/api/Api.js' %}"></script>
+    <script src="{% static 'indexNotAuth.js' %}"></script>
+    {% endblock scrypt %}
 </head>
 <body class="body">
-<header class="header">
-    <nav class="nav">
-        <div class="nav__container container">
-            <ul class="nav__items list">
-                <li class="nav__item nav__item_active"><a href="#" class="nav__link link">Рецепты</a></li>
-                <li class="nav__item nav__item_disabled"><a href="#" class="nav__link link">Список покупок <span class="badge badge_style_blue nav__badge" id="counter">4</span></a></li>
-            </ul>
-            <ul class="nav__items list">
-                <li class="nav__item"><a href="#" class="nav__link link">Войти</a></li>
-                <li class="nav__item"><a href="#" class="button button_style_blue">Создать аккаунт</a></li>
-            </ul>
-        </div>
-    </nav>
-</header>
+{% include 'nav.html' %}
     <main class="main container">
         <div class="main__header">
             <h1 class="main__title">Рецепты</h1>
@@ -148,23 +144,6 @@
             </ul>
         </nav>
     </main>
-    <footer class="footer">
-        <div class="footer__container container">
-            <a href="#" class="footer__brand link">Продуктовый помощник</a>
-            <ul class="footer__items">
-                <li class="footer__item"><a href="#" class="footer__link link">Об авторе </a></li>
-                <li class="footer__item"><a href="#" class="footer__link link">Технологии</a></li>
-            </ul>
-        </div>
-    </footer>
-{% block style %}
-    <script src="{% static 'js/config/config.js' %}"></script>
-    <script src="{% static 'js/components/MainCards.js' %}"></script>
-    <script src="{% static 'js/components/Purchases.js' %}"></script>
-    <script src="{% static 'js/components/CardList.js' %}"></script>
-    <script src="{% static 'js/components/Header.js' %}"></script>
-    <script src="{% static 'js/api/Api.js' %}"></script>
-    <script src="{% static 'indexNotAuth.js' %}"></script>
-    {% endblock style %}
+    {% include 'footer.html' %}
 </body>
 </html>
