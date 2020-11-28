@@ -1,5 +1,7 @@
+from django.contrib.auth import get_user_model
 from django.db import models
-from django.urls import reverse
+
+User = get_user_model()
 
 
 class Tag(models.Model):
@@ -26,6 +28,8 @@ class Recipe(models.Model):
         unique=True,
         help_text='Название рецепта (не более 200 символов)',
     )
+    author = models.ForeignKey(User, on_delete=models.CASCADE,
+                               related_name='recipes')
 
     prepare_time = models.PositiveSmallIntegerField(
         'Время приготовления',
@@ -35,10 +39,11 @@ class Recipe(models.Model):
 
     description = models.TextField('Описание рецепта')
     ingredients = models.ManyToManyField(Ingredient,
-                                         through='Quantity', related_name='recipes')
+                                         through='Quantity',
+                                         related_name='recipes')
     tags = models.ManyToManyField(Tag, related_name='recipes')
     pub_date = models.DateTimeField('Время создания рецепта',
-                                      auto_now_add=True)
+                                    auto_now_add=True)
 
     def get_tags(self):
         return ",".join([str(t) for t in self.tags.all()])

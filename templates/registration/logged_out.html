@@ -1,16 +1,17 @@
 {% extends "base.html" %}
-{% block title %}Пароль изменён{% endblock %}
+{% block title %}Вы вышли{% endblock %}
 
 {% block content %}
-<div class="row justify-content-center">
-    <div class="col-md-8 p-5">
-        <div class="card">
-            <div class="card-header">Вы вышли из системы</div>
-            <div class="card-body">
-                <p>Вы вышли из своей учётной записи. Ждём вас снова!</p>
-            </div> <!-- card body -->
-        </div> <!-- card -->
-    </div> <!-- col -->
-</div> <!-- row -->
+<main class="main container">
+        <div class="main__header">
+            <h1 class="main__title">Вы вышли из системы</h1>
+        </div>
+<div class="card">
+            <div class="card__body">
+                <div class="card-user__header">
+                <p>Вы вышли из своей учётной записи. Ждём Вас снова!</p>
+                </div>
+            </div>
+</main>
 
 {% endblock %}
