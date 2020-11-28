@@ -3,16 +3,16 @@
 {% block content %}
 {# загружаем фильтр #}
 {% load user_filters %}
-
+<link rel="stylesheet" href="/static/pages/form.css">
 <main class="main container">
         <div class="main__header">
             <h1 class="main__title">Зарегистрироваться</h1>
         </div>
             <div class="form-container">
 
-                <form class="form" method="post" enctype="multipart/form-data">
-                    <div class="form__group">
-                        <form method="post" action="{% url 'signup' %}">
+                <form class="form" method="post" action="{% url 'signup' %}">
+
+
                             {% csrf_token %}
 
                             {% for field in form %}
@@ -21,29 +21,15 @@
 
                             {% endfor %}
 
-                    <div class="form__field-group">
-                        {% if messages %}
-                        <ul class="messages bg-warning">
-                        {% for message in messages %}
-                        <li>{{ message }}</li>
-                        {% endfor %}
-                        </ul>
-                        {% endif %}
-
-                        {% if debug %}
-                            Тут будет капча
-                        {% else %}
-                            <script src='https://www.google.com/recaptcha/api.js'></script>
-                            <div class="g-recaptcha" data-sitekey="6Le6KgEVAAAAAG9eIsQNu0GsPnYUS2ubKbAcZ6Lr"></div>
-                        {% endif %}
+                            <div class="form__field-group">
                             <button class="button button_style_blue">
                                 Зарегистрироваться
                             </button>
-                    </div>
-                    </form>
+                            </div>
+
+
                 </form>
-            </div> <!-- card body -->
-        </div> <!-- card -->
+            </div> <!-- card body --><!-- card -->
 
 </main><!-- row -->
 
