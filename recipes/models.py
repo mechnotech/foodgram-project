@@ -1,6 +1,7 @@
 from django.contrib.auth import get_user_model
 from django.db import models
 
+
 User = get_user_model()
 
 
@@ -16,6 +17,11 @@ class Ingredient(models.Model):
                              blank=False, unique=True)
     dimension = models.CharField('Мера измерения', max_length=10,
                                  blank=False)
+
+    class Meta:
+        ordering = [models.F('title').asc()]
+        verbose_name_plural = 'Ингредиенты'
+        verbose_name = 'Ингредиент'
 
     def __str__(self):
         return self.title
@@ -45,11 +51,16 @@ class Recipe(models.Model):
     pub_date = models.DateTimeField('Время создания рецепта',
                                     auto_now_add=True)
 
+    class Meta:
+        ordering = ['-pub_date']
+        verbose_name_plural = 'Рецепты'
+        verbose_name = 'Рецепт'
+
     def get_tags(self):
-        return ",".join([str(t) for t in self.tags.all()])
+        return self.tags.only('tag')
 
     def get_ingredients(self):
-        return self.quantity_set.only('ingredient', 'value')
+        return self.quantity.only('ingredient', 'value')
 
     def __str__(self):
         return self.title
