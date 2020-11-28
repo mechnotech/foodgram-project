@@ -1,12 +1,30 @@
 from django.contrib.auth import get_user_model
 from django.db import models
 
-
 User = get_user_model()
+TAGS = [
+    ('Завтрак', 'Завтрак'),
+    ('Обед', 'Обед'),
+    ('Ужин', 'Ужин'),
+]
+COLORS = [
+    ('orange', 'Оранжевый'),
+    ('green', 'Зеленый'),
+    ('purple', 'Фиолетовый'),
+]
 
 
 class Tag(models.Model):
-    tag = models.CharField(max_length=10, blank=False, null=False)
+    tag = models.CharField(max_length=10, blank=False, null=False,
+                           choices=TAGS)
+    color = models.CharField(max_length=10, blank=True, null=True,
+                             choices=COLORS)
+
+    class Meta:
+        constraints = [
+            models.UniqueConstraint(fields=['tag', 'color'],
+                                    name='tags_color_pairs')
+        ]
 
     def __str__(self):
         return self.tag
@@ -58,6 +76,9 @@ class Recipe(models.Model):
 
     def get_tags(self):
         return self.tags.only('tag')
+
+    def render_tags(self):
+        return self.tags.only('tag', 'color')
 
     def get_ingredients(self):
         return self.quantity.only('ingredient', 'value')
