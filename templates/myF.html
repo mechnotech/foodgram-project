@@ -1,0 +1,30 @@
+{% extends "base.html" %}
+{% block title %}
+    Рецепты
+{% endblock %}
+{% block content %}
+    {%  load static %}
+    <title>Мои подписки</title>
+    <link rel="stylesheet" href="{% static "pages/myFollow.css" %}">
+    <main class="main container">
+    <div class="main__header">
+        <h1 class="main__title">Мои подписки</h1>
+    </div>
+
+        <!-- конец заголовка -->
+        <div class="card-list">
+
+            {% for card in page %}
+
+                {% include "recipe_author_card.html" with card=card %}
+            {% endfor %}
+
+        </div>
+        <!-- Пагинатор -->
+        {% if page.has_other_pages %}
+            {% include "paginator.html" with items=page paginator=paginator%}
+        {% endif %}
+    </main>
+
+{% endblock %}
+

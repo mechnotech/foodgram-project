@@ -37,12 +37,20 @@ def recipe(request, recipe_id):
 
 
 @login_required
-def follow_index(request):
-    authors = Follow.objects.values_list(
-        'author', flat=True).filter(user=request.user).all()
-    post_list = Recipe.objects.filter(author__in=authors)
-    page, paginator = get_paginated_view(request, post_list)
-    return render(request, 'myFollow.html',
+def my_follow(request):
+    rp_per_card = 4
+    authors = Follow.objects.filter(user=request.user).all()
+    card_list = []
+    for author in authors:
+        last_four_recipes = author.author.recipes.all()[:rp_per_card]
+        recipe_count = author.author.recipes.count() - rp_per_card
+        card_list.append(
+            {"author": author,
+             "recipes_list": last_four_recipes,
+             "count": recipe_count if recipe_count > 0 else 0}
+        )
+    page, paginator = get_paginated_view(request, card_list)
+    return render(request, 'myF.html',
                   {'page': page, 'paginator': paginator})
 
 
