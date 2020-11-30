@@ -3,15 +3,14 @@
 
 {% block content %}
 <main class="main container">
-        <div class="main__header">
-            <h1 class="main__title">Вы вышли из системы</h1>
+    <div class="custom-center-block">
+            <p class="custom-text-block">Вы вышли из учетной записи. Ждем Вас снова!</p>
+        <div class="custom-button-block">
+            <form>
+            <button class="button button_style_blue" formaction="{%  url 'index' %}">Перейти на главную</button>
+            </form>
         </div>
-<div class="card">
-            <div class="card__body">
-                <div class="card-user__header">
-                <p>Вы вышли из своей учётной записи. Ждём Вас снова!</p>
-                </div>
-            </div>
+    </div>
 </main>
 
 {% endblock %}
