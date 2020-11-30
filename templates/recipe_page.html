@@ -32,13 +32,15 @@
                 <ul class="single-card__items">
                     <li class="single-card__item"><button class="button button_style_blue" name="purchases" data-out><span class="icon-plus"></span> Добавить в покупки</button></li>
                     <li class="single-card__item">
+                    <form>
                     {% if user.is_authenticated %}
                         {% if following %}
-                            <button class="button button_style_light-red button_size_subscribe" name="unsubscribe" href="{% url 'unfollow' recipe.pk %}" data-out>Отписаться</button>
+                            <button class="button button_style_light-blue button_size_subscribe" name="unsubscribe" formaction="{% url 'unfollow' recipe.pk %}" data-out>Отписаться</button>
                         {% else %}
-                            <button class="button button_style_light-blue-outline button_size_subscribe" name="subscribe" href="{% url 'follow' recipe.pk %}" data-out>Подписаться на автора</button>
+                            <button class="button button_style_light-blue-outline button_size_subscribe" name="subscribe" formaction="{% url 'follow' recipe.pk %}" data-out>Подписаться на автора</button>
                         {% endif %}
                     {% endif %}
+                    </form>
                     </li>
                 </ul>
                 <div class="single-card__section">
