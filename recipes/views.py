@@ -13,7 +13,7 @@ def get_paginated_view(request, recipe_list, page_size=6):
 def index(request):
     recipes_list = Recipe.objects.all()
     page, paginator = get_paginated_view(request, recipes_list)
-    return render(request, 'indexNotAuth.html',
+    return render(request, 'index.html',
                   {'page': page, 'paginator': paginator})
 
 
@@ -24,3 +24,9 @@ def profile(request, username):
     return render(request, 'authorRecipe.html',
                   {'page': page, 'paginator': paginator,
                    'author': author})
+
+
+def recipe(request, recipe_id):
+    one_recipe = get_object_or_404(Recipe, pk=recipe_id)
+    return render(request, 'recipe_page.html', {'recipe': one_recipe})
+

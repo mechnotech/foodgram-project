@@ -81,7 +81,7 @@ class Recipe(models.Model):
         return self.tags.only('tag', 'color')
 
     def get_ingredients(self):
-        return self.quantity.only('ingredient', 'value')
+        return self.quantity_set.only('ingredient', 'value')
 
     def __str__(self):
         return self.title
