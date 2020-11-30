@@ -1,6 +1,7 @@
+from django.contrib.auth.decorators import login_required
 from django.core.paginator import Paginator
-from django.shortcuts import render, get_object_or_404
-from .models import Recipe, User
+from django.shortcuts import render, get_object_or_404, redirect
+from .models import Recipe, User, Follow
 
 
 def get_paginated_view(request, recipe_list, page_size=6):
@@ -30,3 +31,33 @@ def recipe(request, recipe_id):
     one_recipe = get_object_or_404(Recipe, pk=recipe_id)
     return render(request, 'recipe_page.html', {'recipe': one_recipe})
 
+
+@login_required
+def follow_index(request):
+    authors = Follow.objects.values_list(
+        'author', flat=True).filter(user=request.user).all()
+    post_list = Recipe.objects.filter(author__in=authors)
+    page, paginator = get_paginated_view(request, post_list)
+    return render(request, 'myFollow.html',
+                  {'page': page, 'paginator': paginator})
+
+
+@login_required
+def follow(request, recipe_id):
+    one_recipe = get_object_or_404(Recipe, pk=recipe_id)
+    user = request.user
+    author = one_recipe.author
+    if user == author:
+        return redirect('recipe', recipe_id=recipe_id)
+    user.follower.get_or_create(author=author)
+    return redirect('recipe', recipe_id=recipe_id)
+
+
+@login_required
+def unfollow(request, recipe_id):
+    one_recipe = get_object_or_404(Recipe, pk=recipe_id)
+    user = request.user
+    author = one_recipe.author
+    following = user.follower.filter(author=author)
+    following.delete()
+    return redirect('recipe', recipe_id=recipe_id)
