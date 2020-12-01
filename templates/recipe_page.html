@@ -35,9 +35,9 @@
                     <form>
                     {% if user.is_authenticated and user != recipe.author %}
                         {% if following %}
-                            <button class="button button_style_light-blue button_size_subscribe" name="unsubscribe" formaction="{% url 'unfollow' recipe.pk %}" data-out>Отписаться</button>
+                            <button class="button button_style_light-blue button_size_subscribe" name="subscribe" value="{{ recipe.author }}" formaction="{% url 'unfollow' %}" data-out>Отписаться</button>
                         {% else %}
-                            <button class="button button_style_light-blue-outline button_size_subscribe" name="subscribe" formaction="{% url 'follow' recipe.pk %}" data-out>Подписаться на автора</button>
+                            <button class="button button_style_light-blue-outline button_size_subscribe" name="subscribe" value="{{ recipe.author }}" formaction="{% url 'follow' %}" data-out>Подписаться на автора</button>
                         {% endif %}
                     {% endif %}
                     </form>

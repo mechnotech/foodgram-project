@@ -9,7 +9,7 @@
                 {% for recipe in card.recipes_list %}
                 <li class="card-user__item">
                     <div class="recipe">
-                        <img src="{% static "images/testCardImg.png" %}" alt="какой-то-текст" class="recipe__image">
+                        <img src="{% static "images/testCardImg.png" %}" alt="{{ recipe.description }}" class="recipe__image">
                         <h3 class="recipe__title">{{ recipe.title }}</h3>
                         <p class="recipe__text"><span class="icon-time"></span>{{ recipe.prepare_time }} мин.</p>
                     </div>
@@ -24,6 +24,8 @@
             </ul>
         </div>
         <div class="card-user__footer">
-            <button class="button button_style_light-blue button_size_auto" name="subscribe">Отписаться</button>
+            <form>
+            <button class="button button_style_light-blue button_size_auto" name="subscribe" value="{{  card.author.author }}" formaction="{% url 'unfollow' %}">Отписаться</button>
+            </form>
         </div>
 </div>

@@ -33,11 +33,14 @@ def recipe(request, recipe_id):
     if request.user.is_authenticated:
         following = Follow.objects.filter(
             user=request.user, author=one_recipe.author).exists()
-    return render(request, 'recipe_page.html', {'recipe': one_recipe, 'following': following})
+    return render(request, 'recipe_page.html',
+                  {'recipe': one_recipe, 'following': following}
+                  )
 
 
 @login_required
 def my_follow(request):
+    page_size = 3
     rp_per_card = 4
     authors = Follow.objects.filter(user=request.user).all()
     card_list = []
@@ -49,27 +52,31 @@ def my_follow(request):
              "recipes_list": last_four_recipes,
              "count": recipe_count if recipe_count > 0 else 0}
         )
-    page, paginator = get_paginated_view(request, card_list)
-    return render(request, 'myF.html',
+    page, paginator = get_paginated_view(request, card_list, page_size)
+    return render(request, 'myFollow.html',
                   {'page': page, 'paginator': paginator})
 
 
 @login_required
-def follow(request, recipe_id):
-    one_recipe = get_object_or_404(Recipe, pk=recipe_id)
+def follow(request):
+    username = request.GET.get('subscribe')
+    author = get_object_or_404(User, username=username)
     user = request.user
-    author = one_recipe.author
+
     if user == author:
-        return redirect('recipe', recipe_id=recipe_id)
+        return redirect(request.META.get('HTTP_REFERER'))
+
     user.follower.get_or_create(author=author)
-    return redirect('recipe', recipe_id=recipe_id)
+    return redirect(request.META.get('HTTP_REFERER'))
 
 
 @login_required
-def unfollow(request, recipe_id):
-    one_recipe = get_object_or_404(Recipe, pk=recipe_id)
+def unfollow(request):
+    username = request.GET.get('subscribe')
+    author = get_object_or_404(User, username=username)
     user = request.user
-    author = one_recipe.author
     following = user.follower.filter(author=author)
     following.delete()
-    return redirect('recipe', recipe_id=recipe_id)
+
+    return redirect(request.META.get('HTTP_REFERER'))
+
