@@ -14,7 +14,10 @@ def get_paginated_view(request, recipe_list, page_size=6):
 def index(request):
     recipes_list = Recipe.objects.all()
     page, paginator = get_paginated_view(request, recipes_list)
-    return render(request, 'index.html',
+    if request.user.is_authenticated:
+        return render(request, 'index.html',
+                  {'page': page, 'paginator': paginator})
+    return render(request, 'indexNotAuth.html',
                   {'page': page, 'paginator': paginator})
 
 
