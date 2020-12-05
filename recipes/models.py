@@ -9,6 +9,7 @@ class Tag(models.Model):
                              )
     tag = models.CharField(max_length=10, blank=False, null=False,
                            )
+    slug = models.SlugField(max_length=1, null=True, blank=True)
 
     class Meta:
         constraints = [

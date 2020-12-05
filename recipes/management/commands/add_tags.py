@@ -16,10 +16,11 @@ class Command(BaseCommand):
             reader = csv.reader(f)
             current = Tag.objects.count()
             for row in reader:
-                color, tag = row
+                color, tag, slug = row
                 Tag.objects.get_or_create(
                     color=color,
-                    tag=tag
+                    tag=tag,
+                    slug=slug
                 )
             result = Tag.objects.count() - current
             print(f'В базу добавлено {result} тэгов')

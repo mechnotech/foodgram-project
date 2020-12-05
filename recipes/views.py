@@ -2,6 +2,7 @@ from django.contrib.auth.decorators import login_required
 from django.core.paginator import Paginator
 from django.shortcuts import render, get_object_or_404, redirect
 from .models import Recipe, User, Follow
+from .utils import filter_tag
 
 
 def get_paginated_view(request, recipe_list, page_size=6):
@@ -12,13 +13,13 @@ def get_paginated_view(request, recipe_list, page_size=6):
 
 
 def index(request):
-    recipes_list = Recipe.objects.all()
+    recipes_list, tags = filter_tag(request)
     page, paginator = get_paginated_view(request, recipes_list)
     if request.user.is_authenticated:
         return render(request, 'index.html',
-                  {'page': page, 'paginator': paginator})
+                  {'page': page, 'paginator': paginator, 'tags': tags})
     return render(request, 'indexNotAuth.html',
-                  {'page': page, 'paginator': paginator})
+                  {'page': page, 'paginator': paginator, 'tags': tags})
 
 
 def profile(request, username):
