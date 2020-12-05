@@ -2,23 +2,13 @@ from django.contrib.auth import get_user_model
 from django.db import models
 
 User = get_user_model()
-TAGS = [
-    ('Завтрак', 'Завтрак'),
-    ('Обед', 'Обед'),
-    ('Ужин', 'Ужин'),
-]
-COLORS = [
-    ('orange', 'Оранжевый'),
-    ('green', 'Зеленый'),
-    ('purple', 'Фиолетовый'),
-]
 
 
 class Tag(models.Model):
-    tag = models.CharField(max_length=10, blank=False, null=False,
-                           choices=TAGS)
     color = models.CharField(max_length=10, blank=True, null=True,
-                             choices=COLORS)
+                             )
+    tag = models.CharField(max_length=10, blank=False, null=False,
+                           )
 
     class Meta:
         constraints = [
@@ -32,9 +22,9 @@ class Tag(models.Model):
 
 class Ingredient(models.Model):
     title = models.CharField('Название инградиента', max_length=150,
-                             blank=False, unique=True)
+                             blank=False, unique=False)
     dimension = models.CharField('Мера измерения', max_length=10,
-                                 blank=False)
+                                 blank=True)
 
     class Meta:
         ordering = [models.F('title').asc()]
@@ -42,7 +32,7 @@ class Ingredient(models.Model):
         verbose_name = 'Ингредиент'
 
     def __str__(self):
-        return self.title
+        return f'{self.title} ({self.dimension})'
 
 
 class Recipe(models.Model):
@@ -61,7 +51,7 @@ class Recipe(models.Model):
         help_text='Время приготовления в минутах',
     )
 
-    description = models.TextField('Описание рецепта')
+    description = models.TextField('Описание рецепта', max_length=2500)
     ingredients = models.ManyToManyField(Ingredient,
                                          through='Quantity',
                                          related_name='recipes')

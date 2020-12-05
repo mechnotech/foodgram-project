@@ -1,11 +1,10 @@
 from django.contrib import admin
-from .models import Recipe, Tag, Ingredient, Quantity, Follow
+from .models import Recipe, Tag, Ingredient, Follow
 
 
 class QuantityInline(admin.TabularInline):
-    model = Quantity
-    min_num = 1
-    extra = 0
+    model = Recipe.ingredients.through
+    extra = 1
     verbose_name = 'ингредиент'
 
 

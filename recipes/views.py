@@ -37,6 +37,13 @@ def recipe(request, recipe_id):
                   {'recipe': one_recipe, 'following': following}
                   )
 
+def new_recipe(request):
+    return render(request, 'formRecipe.html')
+
+
+def favorite(request):
+    return render(request, 'favorite.html')
+
 
 @login_required
 def my_follow(request):
