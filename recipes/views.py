@@ -38,7 +38,7 @@ def recipe(request, recipe_id):
                   )
 
 def new_recipe(request):
-    return render(request, 'formRecipe.html')
+    return render(request, 'formRecipe-old.html')
 
 
 def favorite(request):
