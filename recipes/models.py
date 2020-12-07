@@ -5,11 +5,9 @@ User = get_user_model()
 
 
 class Tag(models.Model):
-    color = models.CharField(max_length=10, blank=True, null=True,
-                             )
-    tag = models.CharField(max_length=10, blank=False, null=False,
-                           )
-    slug = models.SlugField(max_length=1, null=True, blank=True)
+    color = models.CharField(max_length=10, blank=True, null=True, )
+    tag = models.CharField(max_length=10, blank=False, null=False, )
+    slug = models.SlugField(max_length=1, blank=True, null=True, )
 
     class Meta:
         constraints = [
@@ -87,6 +85,16 @@ class Quantity(models.Model):
         return f'{self.ingredient} - {self.value}'
 
 
+class Favorite(models.Model):
+    user = models.ForeignKey(User, on_delete=models.CASCADE,
+                             related_name='favorite_recipes')
+    recipe = models.ForeignKey(Recipe, on_delete=models.CASCADE,
+                               related_name='recipe_favorites')
+
+    def __str__(self):
+        return f'{self.recipe} избранный пользователем {self.user}'
+
+
 class Follow(models.Model):
     user = models.ForeignKey(User, on_delete=models.CASCADE,
                              related_name='follower')
@@ -103,3 +111,10 @@ class Follow(models.Model):
 
     def __str__(self):
         return f'{self.user} подписан на {self.author}'
+
+
+def is_following(self, user):
+    return self.following.filter(user=user).exists()
+
+
+User.add_to_class("is_following", is_following)

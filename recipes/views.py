@@ -16,8 +16,8 @@ def index(request):
     recipes_list, tags = filter_tag(request)
     page, paginator = get_paginated_view(request, recipes_list)
     if request.user.is_authenticated:
-        return render(request, 'index.html',
-                  {'page': page, 'paginator': paginator, 'tags': tags})
+        return render(request, 'indexAuth.html',
+                      {'page': page, 'paginator': paginator, 'tags': tags})
     return render(request, 'indexNotAuth.html',
                   {'page': page, 'paginator': paginator, 'tags': tags})
 
