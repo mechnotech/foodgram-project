@@ -26,28 +26,6 @@ class Ingredients(LoginRequiredMixin, View):
         return JsonResponse({"success": False}, status=400)
 
 
-# class Favorites(LoginRequiredMixin, View):
-#     """
-#     Функция добавления/удаления рецепта из "Избранное"
-#     """
-#
-#     def post(self, request):
-#         req_ = json.loads(request.body)
-#         recipe_id = req_.get("id", None)
-#         if recipe_id is not None:
-#             recipe = get_object_or_404(Recipe, id=recipe_id)
-#             obj, created = FollowRecipe.objects.get_or_create(
-#                 user=request.user, recipe=recipe
-#             )
-#             if created:
-#                 return JsonResponse({"success": True})
-#             return JsonResponse({"success": False})
-#         return JsonResponse({"success": False}, status=400)
-#
-#     def delete(self, request, recipe_id):
-#         recipe = get_object_or_404(FollowRecipe, recipe=recipe_id, user=request.user)
-#         recipe.delete()
-#         return JsonResponse({"success": True})
 
 
 class Subscribe(LoginRequiredMixin, View):
@@ -75,27 +53,3 @@ class Subscribe(LoginRequiredMixin, View):
         return JsonResponse({"success": True})
 
 
-# class Purchase(LoginRequiredMixin, View):
-#     """
-#     Добавляет/ удаляет рецепты из списка покупок
-#     """
-#
-#     def post(self, request):
-#         req_ = json.loads(request.body)
-#         recipe_id = req_.get("id", None)
-#         if recipe_id is not None:
-#             recipe = get_object_or_404(Recipe, id=recipe_id)
-#             obj, created = ShoppingList.objects.get_or_create(
-#                 user=request.user, recipe=recipe
-#             )
-#             if created:
-#                 return JsonResponse({"success": True})
-#             return JsonResponse({"success": False})
-#         return JsonResponse({"success": False}, status=400)
-#
-#     def delete(self, request, recipe_id):
-#         card_obj = get_object_or_404(
-#             ShoppingList, user=request.user, recipe_id=recipe_id
-#         )
-#         card_obj.delete()
-#         return JsonResponse({"success": True})
