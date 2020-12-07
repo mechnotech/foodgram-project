@@ -7,7 +7,7 @@
     <link rel="stylesheet" href="{% static 'pages/myFollow.css' %}">
 {% endblock css %}
 {% block content %}
-
+    {% csrf_token %}
     <title>Мои подписки</title>
     <link rel="stylesheet" href="{% static "pages/myFollow.css" %}">
     <main class="main container">

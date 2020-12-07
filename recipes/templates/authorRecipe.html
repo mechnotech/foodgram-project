@@ -8,11 +8,24 @@
 {% endblock css %}
 
 {% block content %}
+    {% csrf_token %}
 <body class="body">
     <main class="main container">
         <!-- Загловок с завтрак-обед-ужин в линию -->
         <div class="main__header">
-            <h1 class="main__title">{{ author.get_fullname }}</h1>
+            <h1 class="main__title">{{ author.get_full_name }}</h1>
+                <div class="author-subscribe" data-author="{{ author.pk }}">
+                {% if user.is_authenticated and user != author %}
+                        {% if following %}
+                            <button class="button button_style_light-blue button_size_auto button_style_light-blue-outline"
+                                    name="subscribe">
+                                <span class="icon-check button__icon"></span> Отписаться от автора</button>
+                        {% else %}
+                            <button class="button button_style_light-blue button_size_auto"
+                                    name="subscribe" data-out>Подписаться на автора</button>
+                        {% endif %}
+                    {% endif %}
+                </div>
             {% include 'tags_select_profile.html' %}
         </div>
         <!-- конец заголовка -->
@@ -30,11 +43,13 @@
 </body>
 {% endblock content %}
 {% block scrypt %}
-    <script src="{% static 'js/config/config.js' %}"></script>
-  <script src="{% static 'js/components/MainCards.js' %}"></script>
-  <script src="{% static 'js/components/Favorites.js' %}"></script>
-  <script src="{% static 'js/components/CardList.js' %}"></script>
-  <script src="{% static 'js/components/Header.js' %}"></script>
-  <script src="{% static 'js/api/Api.js' %}"></script>
-  <script src="{% static 'indexAuth.js' %}"></script>
+<script src="{% static 'js/config/config.js' %}"></script>
+<script src="{% static 'js/components/MainCards.js' %}"></script>
+<script src="{% static 'js/components/Purchases.js' %}"></script>
+<script src="{% static 'js/components/Favorites.js' %}"></script>
+<script src="{% static 'js/components/Subscribe.js' %}"></script>
+<script src="{% static 'js/components/AuthorRecipe.js' %}"></script>
+<script src="{% static 'js/components/Header.js' %}"></script>
+<script src="{% static 'js/api/Api.js' %}"></script>
+<script src="{% static 'authorRecipe.js' %}"></script>
 {% endblock scrypt %}
