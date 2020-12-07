@@ -114,7 +114,7 @@ class Follow(models.Model):
 
 
 def is_following(self, user):
-    return self.following.filter(user=user).exists()
+    return self.follower.filter(author=user).exists()
 
 
 User.add_to_class("is_following", is_following)

@@ -26,8 +26,9 @@ def profile(request, username):
     author = get_object_or_404(User, username=username)
     recipes_list, tags = filter_tag(request)
     recipes_list = recipes_list.filter(author=author)
-    following = Follow.objects.filter(
-        user=request.user, author=author).exists()
+    following = False
+    if request.user.is_authenticated:
+        following = request.user.is_following(author)
     page, paginator = get_paginated_view(request, recipes_list)
     return render(request, 'authorRecipe.html',
                   {'page': page,
@@ -42,8 +43,7 @@ def recipe(request, recipe_id):
     one_recipe = get_object_or_404(Recipe, pk=recipe_id)
     following = False
     if request.user.is_authenticated:
-        following = Follow.objects.filter(
-            user=request.user, author=one_recipe.author).exists()
+        following = request.user.is_following(one_recipe.author)
     return render(request, 'singlePage.html',
                   {'recipe': one_recipe,
                    'following': following}
