@@ -2,8 +2,12 @@
 {% block title %}
     Рецепты
 {% endblock %}
+{%  load static %}
+{% block css %}
+    <link rel="stylesheet" href="{% static 'pages/myFollow.css' %}">
+{% endblock css %}
 {% block content %}
-    {%  load static %}
+
     <title>Мои подписки</title>
     <link rel="stylesheet" href="{% static "pages/myFollow.css" %}">
     <main class="main container">
@@ -26,5 +30,14 @@
         {% endif %}
     </main>
 
-{% endblock %}
+{% endblock content%}
+{% block scrypt %}
+<script src="{% static 'js/config/config.js' %}"></script>
+<script src="{% static 'js/components/MainCards.js' %}"></script>
+<script src="{% static 'js/components/MyFollow.js' %}"></script>
+<script src="{% static 'js/components/Subscribe.js' %}"></script>
+<script src="{% static 'js/components/Header.js' %}"></script>
+<script src="{% static 'js/api/Api.js' %}"></script>
+<script src="{% static 'myFollow.js' %}"></script>
+{% endblock scrypt %}
 

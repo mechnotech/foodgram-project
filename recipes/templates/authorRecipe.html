@@ -3,18 +3,10 @@
 {% block title %}
     Рецепты
 {% endblock %}
-{% block stylesheet %}
+{% block css %}
     <link rel="stylesheet" href="{% static 'pages/index.css' %}">
-{% endblock %}
-{% block scrypt %}
-    <script src="{% static 'js/config/config.js' %}"></script>
-  <script src="{% static 'js/components/MainCards.js' %}"></script>
-  <script src="{% static 'js/components/Favorites.js' %}"></script>
-  <script src="{% static 'js/components/CardList.js' %}"></script>
-  <script src="{% static 'js/components/Header.js' %}"></script>
-  <script src="{% static 'js/api/Api.js' %}"></script>
-  <script src="{% static 'indexAuth.js' %}"></script>
-{% endblock scrypt %}
+{% endblock css %}
+
 {% block content %}
 <body class="body">
     <main class="main container">
@@ -36,4 +28,13 @@
         {% endif %}
     </main>
 </body>
-{% endblock %}
+{% endblock content %}
+{% block scrypt %}
+    <script src="{% static 'js/config/config.js' %}"></script>
+  <script src="{% static 'js/components/MainCards.js' %}"></script>
+  <script src="{% static 'js/components/Favorites.js' %}"></script>
+  <script src="{% static 'js/components/CardList.js' %}"></script>
+  <script src="{% static 'js/components/Header.js' %}"></script>
+  <script src="{% static 'js/api/Api.js' %}"></script>
+  <script src="{% static 'indexAuth.js' %}"></script>
+{% endblock scrypt %}

@@ -4,23 +4,13 @@
 {% block title %}
     Рецепты
 {% endblock %}
-{% block stylesheet %}
+{% block css %}
 <link rel="stylesheet" href="/static/pages/single.css">
-{% endblock stylesheet %}
-{% block scrypt %}
-    <script src="{% static 'js/components/Purchases.js' %}"></script>
-    <script src="{% static 'js/components/Favorites.js' %}"></script>
-    <script src="{% static 'js/components/Subscribe.js' %}"></script>
-    <script src="{% static 'js/config/config.js' %}"></script>
-    <script src="{% static 'js/components/MainCards.js' %}"></script>
-    <script src="{% static 'js/components/SingleCard.js' %}"></script>
-    <script src="{% static 'js/components/Header.js' %}"></script>
-    <script src="{% static 'js/api/Api.js' %}"></script>
-    <script src="{% static 'singlePage.js' %}"></script>
-{% endblock scrypt %}
+{% endblock css %}
+
 {% block content %}
     <title>{{ recipe.title }}</title>
-    <link rel="stylesheet" href="{% static "pages/single.css" %}">
+
     <main class="main container">
         <div class="single-card" data-id="{{ recipe.pk }}" data-author="{{ recipe.author.pk }}">
             <img src="{%  static  "images/testCardImg.png" %}" alt="какой-то текст" class="single-card__image">
@@ -76,4 +66,15 @@
     </main>
 
 {% endblock %}
+{% block scrypt %}
+    <script src="{% static 'js/components/Purchases.js' %}"></script>
+    <script src="{% static 'js/components/Favorites.js' %}"></script>
+    <script src="{% static 'js/components/Subscribe.js' %}"></script>
+    <script src="{% static 'js/config/config.js' %}"></script>
+    <script src="{% static 'js/components/MainCards.js' %}"></script>
+    <script src="{% static 'js/components/SingleCard.js' %}"></script>
+    <script src="{% static 'js/components/Header.js' %}"></script>
+    <script src="{% static 'js/api/Api.js' %}"></script>
+    <script src="{% static 'singlePage.js' %}"></script>
+{% endblock scrypt %}
 

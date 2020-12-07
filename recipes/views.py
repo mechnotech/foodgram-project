@@ -71,26 +71,4 @@ def my_follow(request):
                   {'page': page, 'paginator': paginator})
 
 
-@login_required
-def follow(request):
-    username = request.GET.get('subscribe')
-    author = get_object_or_404(User, username=username)
-    user = request.user
-
-    if user == author:
-        return redirect(request.META.get('HTTP_REFERER'))
-
-    user.follower.get_or_create(author=author)
-    return redirect(request.META.get('HTTP_REFERER'))
-
-
-@login_required
-def unfollow(request):
-    username = request.GET.get('subscribe')
-    author = get_object_or_404(User, username=username)
-    user = request.user
-    following = user.follower.filter(author=author)
-    following.delete()
-
-    return redirect(request.META.get('HTTP_REFERER'))
 
