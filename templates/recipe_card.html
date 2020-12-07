@@ -2,7 +2,7 @@
 <div class="card" data-id="{{ recipe.pk }}">
                 <a href="/recipes/{{ recipe.pk }}" class="link" target="_blank"><img src="{% static "images/testCardImg.png" %}" alt="Какой-то текст" class="card__image"></a>
                 <div class="card__body">
-                    <a class="card__title link" href="/recipes/{{ recipe.pk }}" target="_blank">{{ recipe.title }}</a>
+                    <a class="card__title link" href="{% url 'recipe' recipe.pk %}" target="_blank">{{ recipe.title }}</a>
                     <ul class="card__items">
                         {% for tag in recipe.render_tags %}
                             <li class="card__item"><span class="badge badge_style_{{ tag.color }}">{{ tag.tag }}</span></li>
@@ -11,7 +11,7 @@
                     <div class="card__items card__items_column">
                         <p class="card__text"><span class="icon-time"></span>
                             {{ recipe.prepare_time }} мин.</p>
-                        <p class="card__text"><span class="icon-user"></span> <a href="profiles/{{ recipe.author.username }}" style="color: black">{{ recipe.author.get_full_name }}</a></p>
+                        <p class="card__text"><span class="icon-user"></span> <a href="{% url 'profile' recipe.author.username %}" style="color: black">{{ recipe.author.get_full_name }}</a></p>
                     </div>
                 </div>
                 {% if user.is_authenticated %}

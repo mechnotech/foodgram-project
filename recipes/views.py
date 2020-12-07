@@ -24,11 +24,14 @@ def index(request):
 
 def profile(request, username):
     author = get_object_or_404(User, username=username)
-    recipes_list = author.recipes.all()
+    recipes_list, tags = filter_tag(request)
+    recipes_list = recipes_list.filter(author=author)
     page, paginator = get_paginated_view(request, recipes_list)
     return render(request, 'authorRecipe.html',
-                  {'page': page, 'paginator': paginator,
-                   'author': author})
+                  {'page': page,
+                   'paginator': paginator,
+                   'author': author,
+                   'tags': tags})
 
 
 def recipe(request, recipe_id):
@@ -37,12 +40,12 @@ def recipe(request, recipe_id):
     if request.user.is_authenticated:
         following = Follow.objects.filter(
             user=request.user, author=one_recipe.author).exists()
-    return render(request, 'recipe_page.html',
+    return render(request, 'singlePage.html',
                   {'recipe': one_recipe, 'following': following}
                   )
 
 def new_recipe(request):
-    return render(request, 'formRecipe-old.html')
+    return render(request, 'formRecipe.html')
 
 
 def favorite(request):

@@ -1,9 +1,24 @@
 {% extends "base.html" %}
+
+{% load static %}
 {% block title %}
     Рецепты
 {% endblock %}
+{% block stylesheet %}
+<link rel="stylesheet" href="/static/pages/single.css">
+{% endblock stylesheet %}
+{% block scrypt %}
+    <script src="{% static 'js/components/Purchases.js' %}"></script>
+    <script src="{% static 'js/components/Favorites.js' %}"></script>
+    <script src="{% static 'js/components/Subscribe.js' %}"></script>
+    <script src="{% static 'js/config/config.js' %}"></script>
+    <script src="{% static 'js/components/MainCards.js' %}"></script>
+    <script src="{% static 'js/components/SingleCard.js' %}"></script>
+    <script src="{% static 'js/components/Header.js' %}"></script>
+    <script src="{% static 'js/api/Api.js' %}"></script>
+    <script src="{% static 'singlePage.js' %}"></script>
+{% endblock scrypt %}
 {% block content %}
-    {%  load static %}
     <title>{{ recipe.title }}</title>
     <link rel="stylesheet" href="{% static "pages/single.css" %}">
     <main class="main container">
@@ -32,15 +47,15 @@
                 <ul class="single-card__items">
                     <li class="single-card__item"><button class="button button_style_blue" name="purchases" data-out><span class="icon-plus"></span> Добавить в покупки</button></li>
                     <li class="single-card__item">
-                    <form>
+
                     {% if user.is_authenticated and user != recipe.author %}
                         {% if following %}
-                            <button class="button button_style_light-blue button_size_subscribe" name="subscribe" value="{{ recipe.author }}" formaction="{% url 'unfollow' %}" data-out>Отписаться</button>
+                            <button class="button button_style_light-blue button_size_auto button_style_light-blue-outline" name="subscribe"><span class="icon-check button__icon"></span>Отписаться</button>
                         {% else %}
-                            <button class="button button_style_light-blue-outline button_size_subscribe" name="subscribe" value="{{ recipe.author }}" formaction="{% url 'follow' %}" data-out>Подписаться на автора</button>
+                            <li class="single-card__item"><button class="button button_style_light-blue button_size_auto" name="subscribe" data-out="true">Подписаться</button>
                         {% endif %}
                     {% endif %}
-                    </form>
+
                     </li>
                 </ul>
                 <div class="single-card__section">
