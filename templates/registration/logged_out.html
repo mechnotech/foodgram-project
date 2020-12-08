@@ -1,6 +1,9 @@
 {% extends "base.html" %}
+{% load static %}
 {% block title %}Вы вышли{% endblock %}
-
+{% block css %}
+    <link rel="stylesheet" href="{% static 'pages/index.css' %}">
+{% endblock css %}
 {% block content %}
 <main class="main container">
     <div class="custom-center-block">
@@ -13,4 +16,4 @@
     </div>
 </main>
 
-{% endblock %}
+{% endblock content %}

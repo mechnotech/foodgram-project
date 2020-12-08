@@ -11,6 +11,7 @@ from recipes.models import (
     Recipe,
     User,
     Favorite,
+    ShopCart,
 )
 
 
@@ -79,4 +80,29 @@ class Subscribe(LoginRequiredMixin, View):
             author=author_id
         )
         following.delete()
+        return JsonResponse({"success": True})
+
+
+class Purchases(LoginRequiredMixin, View):
+
+    def post(self, request):
+        req = json.loads(request.body)
+        recipe_id = req.get("id", None)
+        if recipe_id is not None:
+            recipe = get_object_or_404(Recipe, pk=recipe_id)
+            obj, created = ShopCart.objects.get_or_create(
+                user=request.user, recipe=recipe
+            )
+            if created:
+                return JsonResponse({"success": True})
+            return JsonResponse({"success": False})
+        return JsonResponse({"success": False}, status=400)
+
+    def delete(self, request, recipe_id):
+        purchase = get_object_or_404(
+            ShopCart,
+            user=request.user,
+            recipe=recipe_id
+        )
+        purchase.delete()
         return JsonResponse({"success": True})

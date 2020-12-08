@@ -1,8 +1,12 @@
 {% extends "base.html" %}
+{% load static %}
 {% block title %}Войти{% endblock %}
+{% block css %}
+    <link rel="stylesheet" href="{% static 'pages/form.css' %}">
+{% endblock css %}
 {% block content %}
 {% load user_filters %}
-<link rel="stylesheet" href="/static/pages/form.css">
+
 <main class="main container">
         <div class="main__header">
             <h1 class="main__title">Войти</h1>
@@ -52,12 +56,12 @@
               <button class="button button_style_blue">
                 Войти
               </button>
-              <!-- <a href="{% url 'password_reset' %}" class="form__forgot-link">
-                Забыли пароль? -->
-              </a>
+              <a href="{% url 'password_reset' %}" class="form__forgot-link">
+                  Забыли пароль?</a>
+
           </div>
         </form>
       </div> <!-- card body -->
 </main>
 
-{% endblock %}
+{% endblock content %}

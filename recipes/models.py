@@ -143,6 +143,7 @@ def shop_cart_list(self):
 
 
 def shop_count(self):
+    """Количество покупок пользователя"""
     return len(self.shopcart_recipes.filter(user=self))
 
 
