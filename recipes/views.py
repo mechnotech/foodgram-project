@@ -1,8 +1,10 @@
 from django.contrib.auth.decorators import login_required
 from django.core.paginator import Paginator
+from django.http import HttpResponse
 from django.shortcuts import render, get_object_or_404
+
 from .models import Recipe, User, Follow
-from .utils import filter_tag
+from .utils import filter_tag, get_download_file
 
 
 def get_paginated_view(request, recipe_list, page_size=6):
@@ -55,6 +57,7 @@ def recipe(request, recipe_id):
                    'following': following}
                   )
 
+
 def new_recipe(request):
     return render(request, 'formRecipe.html')
 
@@ -95,3 +98,14 @@ def my_follow(request):
 @login_required
 def shop(request):
     return render(request, 'shopList.html')
+
+
+@login_required
+def downloads(request):
+    recipes = request.user.shop_cart_list()
+    file_text = get_download_file(recipes)
+
+    response = HttpResponse(file_text,
+                            content_type='application/text charset=utf-8')
+    response['Content-Disposition'] = 'attachment; filename="Shop_list.txt"'
+    return response
