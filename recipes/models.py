@@ -92,7 +92,7 @@ class Favorite(models.Model):
                                related_name='recipe_favorites')
 
     def __str__(self):
-        return f'{self.recipe} избранный пользователем {self.user}'
+        return f'{self.recipe.title} избранный пользователем {self.user}'
 
 
 class Follow(models.Model):
@@ -113,8 +113,17 @@ class Follow(models.Model):
         return f'{self.user} подписан на {self.author}'
 
 
-def is_following(self, user):
-    return self.follower.filter(author=user).exists()
+def is_following(self, author):
+    "Проверка есть ли подписка пользователя на автора"
+    return self.follower.filter(author=author).exists()
 
 
-User.add_to_class("is_following", is_following)
+def favorites_list(self, user):
+    "Вернуть список всех избранных пользователем рецептов"
+    qs = self.favorite_recipes.filter(user=user)
+    favorite_ids = qs.values_list('recipe', flat=True)
+    return Recipe.objects.filter(pk__in=favorite_ids)
+
+
+User.add_to_class('is_following', is_following)
+User.add_to_class('favorites_list', favorites_list)

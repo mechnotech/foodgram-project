@@ -28,16 +28,17 @@
                 </div>
             {% include 'tags_select_profile.html' %}
         </div>
+
         <!-- конец заголовка -->
         <div class="card-list">
             {% for recipe in page %}
-                {% include "recipe_card.html" with recipe=recipe %}
+                {% include "recipe_card.html" with recipe=recipe favorite_recipes=favorite_recipes tags=tags %}
             {% endfor %}
 
         </div>
         <!-- Пагинатор -->
         {% if page.has_other_pages %}
-            {% include "paginator.html" with items=page paginator=paginator%}
+            {% include "paginator.html" with items=page paginator=paginator tags=tags %}
         {% endif %}
     </main>
 </body>

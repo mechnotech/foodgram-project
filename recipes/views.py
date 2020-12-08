@@ -1,6 +1,6 @@
 from django.contrib.auth.decorators import login_required
 from django.core.paginator import Paginator
-from django.shortcuts import render, get_object_or_404, redirect
+from django.shortcuts import render, get_object_or_404
 from .models import Recipe, User, Follow
 from .utils import filter_tag
 
@@ -13,28 +13,39 @@ def get_paginated_view(request, recipe_list, page_size=6):
 
 
 def index(request):
+    user = request.user
     recipes_list, tags = filter_tag(request)
     page, paginator = get_paginated_view(request, recipes_list)
     if request.user.is_authenticated:
+        favorite_recipes = user.favorites_list(user)
         return render(request, 'indexAuth.html',
-                      {'page': page, 'paginator': paginator, 'tags': tags})
+                      {'page': page,
+                       'paginator': paginator,
+                       'tags': tags,
+                       'favorite_recipes': favorite_recipes,
+                       }
+                      )
     return render(request, 'indexNotAuth.html',
                   {'page': page, 'paginator': paginator, 'tags': tags})
 
 
 def profile(request, username):
     author = get_object_or_404(User, username=username)
+    user = request.user
     recipes_list, tags = filter_tag(request)
     recipes_list = recipes_list.filter(author=author)
     following = False
+    favorite_recipes = False
     if request.user.is_authenticated:
-        following = request.user.is_following(author)
+        following = user.is_following(author)
+        favorite_recipes = user.favorites_list(user)
     page, paginator = get_paginated_view(request, recipes_list)
     return render(request, 'authorRecipe.html',
                   {'page': page,
                    'paginator': paginator,
                    'author': author,
                    'following': following,
+                   'favorite_recipes': favorite_recipes,
                    'tags': tags}
                   )
 
@@ -50,11 +61,23 @@ def recipe(request, recipe_id):
                   )
 
 def new_recipe(request):
+
     return render(request, 'formRecipe.html')
 
 
+@login_required
 def favorite(request):
-    return render(request, 'favorite.html')
+    user = request.user
+    favorites = user.favorites_list(user)
+    recipes_list, tags = filter_tag(request, favorites)
+    page, paginator = get_paginated_view(request, recipes_list)
+    return render(request, 'favorite.html',
+                  {'page': page,
+                   'paginator': paginator,
+                   'tags': tags,
+                   'favorite_recipes': favorites,
+                   }
+                  )
 
 
 @login_required
