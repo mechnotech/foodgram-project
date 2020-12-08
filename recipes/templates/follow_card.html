@@ -9,7 +9,7 @@
                 {% for recipe in card.recipes_list %}
                 <li class="card-user__item">
                     <div class="recipe">
-                        <img src="{% static "images/testCardImg.png" %}" alt="{{ recipe.description }}" class="recipe__image">
+                        <img src="{% if recipe.image %}{{ recipe.image.url }}{% else %}{% static "images/defaultMeal.jpg" %}{% endif %}" alt="{{ recipe.description }}" class="recipe__image">
                         <h3 class="recipe__title">{{ recipe.title }}</h3>
                         <p class="recipe__text"><span class="icon-time"></span>{{ recipe.prepare_time }} мин.</p>
                     </div>

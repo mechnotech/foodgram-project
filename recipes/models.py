@@ -55,6 +55,7 @@ class Recipe(models.Model):
                                          through='Quantity',
                                          related_name='recipes')
     tags = models.ManyToManyField(Tag, related_name='recipes')
+    image = models.ImageField(upload_to='recipes/', blank=True, null=True)
     pub_date = models.DateTimeField('Время создания рецепта',
                                     auto_now_add=True)
 
