@@ -10,30 +10,55 @@ from recipes.models import (
     Follow,
     Recipe,
     User,
+    Favorite,
 )
+
+
+class Favorites(LoginRequiredMixin, View):
+
+    def post(self, request):
+        req = json.loads(request.body)
+        recipe_id = req.get("id", None)
+        if recipe_id:
+            recipe = get_object_or_404(Recipe, pk=recipe_id)
+            obj, created = Favorite.objects.get_or_create(
+                user=request.user,
+                recipe=recipe
+            )
+            if created:
+                return JsonResponse({"success": True})
+            return JsonResponse({"success": False})
+        return JsonResponse({"success": False}, status=400)
+
+    def delete(self, request, recipe_id):
+        favorite = get_object_or_404(
+            Favorite,
+            user=request.user,
+            recipe=recipe_id
+        )
+        favorite.delete()
+        return JsonResponse({"success": True})
+
 
 
 class Ingredients(LoginRequiredMixin, View):
 
-
     def get(self, request):
         query = request.GET.get("query", None)
         if query is not None:
-            response = Ingredient.objects.filter(title__icontains=query).values(
+            response = Ingredient.objects.filter(
+                title__icontains=query).values(
                 "title", "dimension"
             )
             return JsonResponse(list(response), safe=False)
         return JsonResponse({"success": False}, status=400)
 
 
-
-
 class Subscribe(LoginRequiredMixin, View):
 
-
     def post(self, request):
-        req_ = json.loads(request.body)
-        user_id = req_.get("id", None)
+        req = json.loads(request.body)
+        user_id = req.get("id", None)
         if user_id is not None:
 
             if self.request.user.id == user_id:
@@ -48,8 +73,10 @@ class Subscribe(LoginRequiredMixin, View):
         return JsonResponse({"success": False}, status=400)
 
     def delete(self, request, author_id):
-        following = get_object_or_404(Follow, user=request.user, author=author_id)
+        following = get_object_or_404(
+            Follow,
+            user=request.user,
+            author=author_id
+        )
         following.delete()
         return JsonResponse({"success": True})
-
-
