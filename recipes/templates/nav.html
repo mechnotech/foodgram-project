@@ -2,7 +2,7 @@
 {% url 'my_follow' as my_follow %}
 {% url 'new_recipe' as new_recipe %}
 {% url 'favorite' as favorite %}
-{% url 'card' as card %}
+{% url 'shop' as shop %}
 
 <header class="header">
       <nav class="nav">
@@ -17,11 +17,11 @@
                           <a href="{% url 'new_recipe' %}" class="nav__link link">Создать рецепт</a></li>
                       <li class="nav__item {% if request.path == favorite %} nav__item_active {% endif %}">
                           <a href="{% url 'favorite' %}" class="nav__link link">Избранное</a></li>
-                      <li class="nav__item">
-                          <a href="#" class="nav__link link">Список покупок</a> <span class="badge badge_style_blue nav__badge" id="counter">1</span></li>
+                      <li class="nav__item {% if request.path == shop %} nav__item_active {% endif %}">
+                          <a href="{% url 'shop' %}" class="nav__link link">Список покупок</a> <span class="badge badge_style_blue nav__badge" id="counter">{{ request.user.shop_count }}</span></li>
                   {% else %}
                       <li class="nav__item {% if request.path == index %} nav__item_active {% endif %}"><a href="{% url 'index' %}" class="nav__link link">Рецепты</a></li>
-                      <li class="nav__item nav__item_disabled"><a href="#" class="nav__link link">Список покупок <span class="badge badge_style_blue nav__badge" ></span></a></li>
+                      <li class="nav__item nav__item_disabled"><a href="#" class="nav__link link">Список покупок <span class="badge badge_style_blue nav__badge" >0</span></a></li>
                   {% endif %}
               </ul>
               <ul class="nav__items list">

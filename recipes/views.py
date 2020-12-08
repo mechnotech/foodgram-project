@@ -17,12 +17,10 @@ def index(request):
     recipes_list, tags = filter_tag(request)
     page, paginator = get_paginated_view(request, recipes_list)
     if request.user.is_authenticated:
-        favorite_recipes = user.favorites_list(user)
         return render(request, 'indexAuth.html',
                       {'page': page,
                        'paginator': paginator,
                        'tags': tags,
-                       'favorite_recipes': favorite_recipes,
                        }
                       )
     return render(request, 'indexNotAuth.html',
@@ -35,17 +33,14 @@ def profile(request, username):
     recipes_list, tags = filter_tag(request)
     recipes_list = recipes_list.filter(author=author)
     following = False
-    favorite_recipes = False
     if request.user.is_authenticated:
         following = user.is_following(author)
-        favorite_recipes = user.favorites_list(user)
     page, paginator = get_paginated_view(request, recipes_list)
     return render(request, 'authorRecipe.html',
                   {'page': page,
                    'paginator': paginator,
                    'author': author,
                    'following': following,
-                   'favorite_recipes': favorite_recipes,
                    'tags': tags}
                   )
 
@@ -61,21 +56,19 @@ def recipe(request, recipe_id):
                   )
 
 def new_recipe(request):
-
     return render(request, 'formRecipe.html')
 
 
 @login_required
 def favorite(request):
     user = request.user
-    favorites = user.favorites_list(user)
+    favorites = user.favorites_list()
     recipes_list, tags = filter_tag(request, favorites)
     page, paginator = get_paginated_view(request, recipes_list)
     return render(request, 'favorite.html',
                   {'page': page,
                    'paginator': paginator,
                    'tags': tags,
-                   'favorite_recipes': favorites,
                    }
                   )
 
@@ -99,4 +92,6 @@ def my_follow(request):
                   {'page': page, 'paginator': paginator})
 
 
-
+@login_required
+def shop(request):
+    return render(request, 'shopList.html')

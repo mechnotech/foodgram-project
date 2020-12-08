@@ -1,5 +1,5 @@
 from django.contrib import admin
-from .models import Recipe, Tag, Ingredient, Follow, Favorite
+from .models import Recipe, Tag, Ingredient, Follow, Favorite, ShopCart
 
 
 class QuantityInline(admin.TabularInline):
@@ -33,8 +33,13 @@ class FavoriteAdmin(admin.ModelAdmin):
     list_display = ('pk', 'user', 'recipe')
 
 
+class ShopCartAdmin(admin.ModelAdmin):
+    list_display = ('pk', 'user', 'recipe')
+
+
 admin.site.register(Recipe, RecipeAdmin)
 admin.site.register(Tag, TagAdmin)
 admin.site.register(Ingredient, IngredientAdmin)
 admin.site.register(Follow, FollowAdmin)
 admin.site.register(Favorite, FavoriteAdmin)
+admin.site.register(ShopCart, ShopCartAdmin)

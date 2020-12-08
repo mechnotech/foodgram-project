@@ -95,6 +95,16 @@ class Favorite(models.Model):
         return f'{self.recipe.title} избранный пользователем {self.user}'
 
 
+class ShopCart(models.Model):
+    user = models.ForeignKey(User, on_delete=models.CASCADE,
+                             related_name='shopcart_recipes')
+    recipe = models.ForeignKey(Recipe, on_delete=models.CASCADE,
+                               related_name='recipe_shopcarts')
+
+    def __str__(self):
+        return f'{self.recipe.title} в покупках пользователя {self.user}'
+
+
 class Follow(models.Model):
     user = models.ForeignKey(User, on_delete=models.CASCADE,
                              related_name='follower')
@@ -114,16 +124,29 @@ class Follow(models.Model):
 
 
 def is_following(self, author):
-    "Проверка есть ли подписка пользователя на автора"
+    """Проверка есть ли подписка пользователя на автора"""
     return self.follower.filter(author=author).exists()
 
 
-def favorites_list(self, user):
-    "Вернуть список всех избранных пользователем рецептов"
-    qs = self.favorite_recipes.filter(user=user)
-    favorite_ids = qs.values_list('recipe', flat=True)
-    return Recipe.objects.filter(pk__in=favorite_ids)
+def favorites_list(self):
+    """Вернуть список всех, избранных пользователем, рецептов"""
+    qs = self.favorite_recipes.filter(user=self)
+    recipes_ids = qs.values_list('recipe', flat=True)
+    return Recipe.objects.filter(pk__in=recipes_ids)
+
+
+def shop_cart_list(self):
+    """Вернуть список всех покупок пользователя"""
+    qs = self.shopcart_recipes.filter(user=self)
+    recipes_ids = qs.values_list('recipe', flat=True)
+    return Recipe.objects.filter(pk__in=recipes_ids)
+
+
+def shop_count(self):
+    return len(self.shopcart_recipes.filter(user=self))
 
 
 User.add_to_class('is_following', is_following)
 User.add_to_class('favorites_list', favorites_list)
+User.add_to_class('shop_cart_list', shop_cart_list)
+User.add_to_class('shop_count', shop_count)
