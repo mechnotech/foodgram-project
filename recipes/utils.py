@@ -2,7 +2,7 @@ from recipes.models import Recipe, Ingredient
 
 
 def filter_tag(request, recipes_list=None):
-    tags = request.GET.get('tags')
+    tags = request.GET.get('tags', 'bld')
     if recipes_list:
         recipes_list = recipes_list.prefetch_related(
             'author', 'tags'

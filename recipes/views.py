@@ -129,7 +129,7 @@ def recipe_edit(request, recipe_id):
         form = RecipeForm(instance=recipe)
         ingredients = recipe.get_ingredients()
     return render(
-        request, 'formRecipe.html',
+        request, 'formChangeRecipe.html',
         {'form': form, 'recipe': recipe, 'tags': tags, 'ingredients': ingredients })
 
 
