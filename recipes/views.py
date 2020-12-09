@@ -100,7 +100,7 @@ def new_recipe(request):
 def recipe_edit(request, recipe_id):
     recipe = get_object_or_404(Recipe, id=recipe_id)
     if request.user != recipe.author:
-        return redirect('recipe_view', recipe_id=recipe_id)
+        return redirect('recipe', recipe_id=recipe_id)
 
     if request.method == 'POST':
         form = RecipeForm(request.POST or None,
