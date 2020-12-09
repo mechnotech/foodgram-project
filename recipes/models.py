@@ -64,6 +64,9 @@ class Recipe(models.Model):
         verbose_name_plural = 'Рецепты'
         verbose_name = 'Рецепт'
 
+    def save(self, *args, **kwargs):
+        super().save(*args, **kwargs)
+
     def get_tags(self):
         return self.tags.only('tag')
 

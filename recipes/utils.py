@@ -1,4 +1,4 @@
-from recipes.models import Recipe
+from recipes.models import Recipe, Ingredient
 
 
 def filter_tag(request, recipes_list=None):
@@ -16,6 +16,36 @@ def filter_tag(request, recipes_list=None):
         tags__slug__in=tags
     ).distinct()
     return recipes_list, tags
+
+
+def insert_tags(request_data):
+    tags = ''
+    if request_data.get('breakfast'):
+        tags += 'b'
+    if request_data.get('lunch'):
+        tags += 'l'
+    if request_data.get('dinner'):
+        tags += 'd'
+    return tags
+
+
+def insert_ingredients(request_data):
+    ingredients = []
+
+    filtered = [
+        request_data[key]
+        for key in request_data.keys()
+        if key.startswith('nameIngredient') or key.startswith('valueIngredient') or key.startswith('unitsIngredient')
+    ]
+
+    ing = [filtered[i:i + 3] for i in range(0, len(filtered), 3)]
+
+    for i in ing:
+        obj, created = Ingredient.objects.get_or_create(title=i[0],
+                                                        dimension=i[2])
+        ingredients.append((obj, i[1]))
+
+    return ingredients
 
 
 def get_download_file(recipes):

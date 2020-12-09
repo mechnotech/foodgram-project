@@ -1,10 +1,13 @@
 from django.contrib.auth.decorators import login_required
 from django.core.paginator import Paginator
 from django.http import HttpResponse
-from django.shortcuts import render, get_object_or_404
+from django.shortcuts import render, get_object_or_404, redirect
+from django.utils import timezone
 
-from .models import Recipe, User, Follow
-from .utils import filter_tag, get_download_file
+from .forms import RecipeForm
+from .models import Recipe, User, Follow, Tag, Quantity
+from .utils import filter_tag, get_download_file, insert_tags, \
+    insert_ingredients
 
 
 def get_paginated_view(request, recipe_list, page_size=6):
@@ -15,7 +18,6 @@ def get_paginated_view(request, recipe_list, page_size=6):
 
 
 def index(request):
-    user = request.user
     recipes_list, tags = filter_tag(request)
     page, paginator = get_paginated_view(request, recipes_list)
     if request.user.is_authenticated:
@@ -58,8 +60,77 @@ def recipe(request, recipe_id):
                   )
 
 
+@login_required
 def new_recipe(request):
-    return render(request, 'formRecipe.html')
+    if request.method == 'POST':
+        form = RecipeForm(request.POST or None, files=request.FILES or None)
+        tags = insert_tags(request.POST)
+        ingredients = insert_ingredients(request.POST)
+        if form.is_valid():
+            recipe = form.save(commit=False)
+            recipe.author = request.user
+            recipe.pub_date = timezone.now()
+            success_save = recipe.save()
+
+            if success_save == 400:
+                recipe.delete()
+                return redirect('page_bad_request')
+
+            tags = insert_tags(request.POST)
+            for i in ingredients:
+                Quantity.objects.get_or_create(
+                    ingredient=i[0],
+                    value=i[1],
+                    recipe=recipe
+                )
+            recipe.tags.set(Tag.objects.filter(slug__in=tags))
+            recipe.save()
+
+            return redirect('recipe', recipe_id=recipe.pk)
+    else:
+        form = RecipeForm(request.POST or None)
+        tags = 'l'
+        ingredients = None
+    return render(request, 'formRecipe.html',
+                  {'form': form, 'tags': tags, 'ingredients': ingredients}
+                  )
+
+
+# @login_required
+# def recipe_edit(request, recipe_id):
+#     '''Редактирование рецепта.'''
+#     recipe = get_object_or_404(Recipe, id=recipe_id)
+#     if request.user != recipe.author:
+#         return redirect('recipe_view', recipe_id=recipe_id)
+#     if request.method == 'POST':
+#         form = RecipeForm(request.POST or None,
+#                           files=request.FILES or None, instance=recipe)
+#         if form.is_valid():
+#             recipe.ingredients.remove()
+#             recipe.recipe_amount.all().delete()
+#             recipe.recipe_tag.all().delete()
+#             success_save = save_recipe(request, form)
+#             if success_save == 400:
+#                 return redirect('page_bad_request')
+#             return redirect('recipe_view', recipe_id=recipe_id)
+#     else:
+#         tags_saved = recipe.recipe_tag.values_list('title', flat=True)
+#         form = RecipeForm(instance=recipe)
+#         form.fields['tag'].initial = list(tags_saved)
+#         tags = get_tag(tags_saved)
+#     return render(
+#         request, 'formChangeRecipe.html',
+#         {'form': form, 'recipe': recipe, 'tags': tags})
+
+
+@login_required
+def recipe_delete(request, recipe_id):
+    '''Уделение рецепта.'''
+    recipe = get_object_or_404(Recipe, id=recipe_id)
+    if request.user == recipe.author:
+        recipe.delete()
+        return redirect('profile', username=request.user.username)
+    return redirect('recipes')
 
 
 @login_required
