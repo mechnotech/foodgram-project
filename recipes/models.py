@@ -73,8 +73,17 @@ class Recipe(models.Model):
     def render_tags(self):
         return self.tags.only('tag', 'color')
 
+    def get_tags_slug(self):
+        tag = ''
+        for t in self.tags.only('slug'):
+            tag += t.slug
+        return tag
+
     def get_ingredients(self):
-        return self.quantity_set.only('ingredient', 'value')
+        ingredients = []
+        for i in self.quantity_set.only('ingredient', 'value', 'ingredient__dimension'):
+            ingredients.append((i.ingredient, i.value))
+        return ingredients
 
     def __str__(self):
         return self.title

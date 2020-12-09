@@ -96,41 +96,50 @@ def new_recipe(request):
                   )
 
 
-# @login_required
-# def recipe_edit(request, recipe_id):
-#     '''Редактирование рецепта.'''
-#     recipe = get_object_or_404(Recipe, id=recipe_id)
-#     if request.user != recipe.author:
-#         return redirect('recipe_view', recipe_id=recipe_id)
-#     if request.method == 'POST':
-#         form = RecipeForm(request.POST or None,
-#                           files=request.FILES or None, instance=recipe)
-#         if form.is_valid():
-#             recipe.ingredients.remove()
-#             recipe.recipe_amount.all().delete()
-#             recipe.recipe_tag.all().delete()
-#             success_save = save_recipe(request, form)
-#             if success_save == 400:
-#                 return redirect('page_bad_request')
-#             return redirect('recipe_view', recipe_id=recipe_id)
-#     else:
-#         tags_saved = recipe.recipe_tag.values_list('title', flat=True)
-#         form = RecipeForm(instance=recipe)
-#         form.fields['tag'].initial = list(tags_saved)
-#         tags = get_tag(tags_saved)
-#     return render(
-#         request, 'formChangeRecipe.html',
-#         {'form': form, 'recipe': recipe, 'tags': tags})
+@login_required
+def recipe_edit(request, recipe_id):
+    recipe = get_object_or_404(Recipe, id=recipe_id)
+    if request.user != recipe.author:
+        return redirect('recipe_view', recipe_id=recipe_id)
+
+    if request.method == 'POST':
+        form = RecipeForm(request.POST or None,
+                          files=request.FILES or None, instance=recipe)
+        tags = insert_tags(request.POST)
+        ingredients = insert_ingredients(request.POST)
+        if form.is_valid():
+            recipe.ingredients.clear()
+            recipe.tags.remove()
+
+            for i in ingredients:
+                Quantity.objects.get_or_create(
+                    ingredient=i[0],
+                    value=i[1],
+                    recipe=recipe
+                )
+            recipe.tags.set(Tag.objects.filter(slug__in=tags))
+            recipe.save()
+
+            success_save = form.save()
+            if success_save == 400:
+                return redirect('page_bad_request')
+            return redirect('recipe', recipe_id=recipe_id)
+    else:
+        tags = recipe.get_tags_slug()
+        form = RecipeForm(instance=recipe)
+        ingredients = recipe.get_ingredients()
+    return render(
+        request, 'formRecipe.html',
+        {'form': form, 'recipe': recipe, 'tags': tags, 'ingredients': ingredients })
 
 
 @login_required
 def recipe_delete(request, recipe_id):
-    '''Уделение рецепта.'''
     recipe = get_object_or_404(Recipe, id=recipe_id)
     if request.user == recipe.author:
         recipe.delete()
         return redirect('profile', username=request.user.username)
-    return redirect('recipes')
+    return redirect('recipe', recipe_id=recipe_id)
 
 
 @login_required
@@ -180,3 +189,5 @@ def downloads(request):
                             content_type='application/text charset=utf-8')
     response['Content-Disposition'] = 'attachment; filename="Shop_list.txt"'
     return response
+
+

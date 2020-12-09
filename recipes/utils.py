@@ -35,7 +35,10 @@ def insert_ingredients(request_data):
     filtered = [
         request_data[key]
         for key in request_data.keys()
-        if key.startswith('nameIngredient') or key.startswith('valueIngredient') or key.startswith('unitsIngredient')
+        if
+        key.startswith('nameIngredient')
+        or key.startswith('valueIngredient')
+        or key.startswith('unitsIngredient')
     ]
 
     ing = [filtered[i:i + 3] for i in range(0, len(filtered), 3)]
