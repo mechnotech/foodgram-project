@@ -41,7 +41,6 @@ class Favorites(LoginRequiredMixin, View):
         return JsonResponse({"success": True})
 
 
-
 class Ingredients(LoginRequiredMixin, View):
 
     def get(self, request):

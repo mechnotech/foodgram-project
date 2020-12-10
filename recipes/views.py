@@ -7,8 +7,12 @@ from django.views.decorators.csrf import requires_csrf_token
 
 from .forms import RecipeForm
 from .models import Recipe, User, Follow, Tag, Quantity
-from .utils import filter_tag, get_download_file, insert_tags, \
-    insert_ingredients
+from .utils import (
+    filter_tag,
+    get_download_file,
+    insert_tags,
+    insert_ingredients,
+)
 
 
 def get_paginated_view(request, recipe_list, page_size=6):

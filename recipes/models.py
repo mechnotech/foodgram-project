@@ -81,8 +81,13 @@ class Recipe(models.Model):
 
     def get_ingredients(self):
         ingredients = []
-        for i in self.quantity_set.only('ingredient', 'value', 'ingredient__dimension'):
+        for i in self.quantity_set.only(
+                'ingredient',
+                'value',
+                'ingredient__dimension'):
+
             ingredients.append((i.ingredient, i.value))
+
         return ingredients
 
     def __str__(self):
