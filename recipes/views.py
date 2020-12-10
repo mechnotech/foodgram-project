@@ -3,6 +3,7 @@ from django.core.paginator import Paginator
 from django.http import HttpResponse
 from django.shortcuts import render, get_object_or_404, redirect
 from django.utils import timezone
+from django.views.decorators.csrf import requires_csrf_token
 
 from .forms import RecipeForm
 from .models import Recipe, User, Follow, Tag, Quantity
@@ -130,7 +131,8 @@ def recipe_edit(request, recipe_id):
         ingredients = recipe.get_ingredients()
     return render(
         request, 'formChangeRecipe.html',
-        {'form': form, 'recipe': recipe, 'tags': tags, 'ingredients': ingredients })
+        {'form': form, 'recipe': recipe, 'tags': tags,
+         'ingredients': ingredients})
 
 
 @login_required
@@ -191,3 +193,16 @@ def downloads(request):
     return response
 
 
+@requires_csrf_token
+def page_bad_request(request, exception):
+    return render(request, "misc/400.html", {"path": request.path}, status=400)
+
+
+@requires_csrf_token
+def page_not_found(request, exception):
+    return render(request, 'misc/404.html', {"path": request.path}, status=404)
+
+
+@requires_csrf_token
+def server_error(request):
+    return render(request, "misc/500.html", status=500)

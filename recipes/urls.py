@@ -18,3 +18,5 @@ urlpatterns = [
          name='recipe_delete'),
     path('follow/', views.my_follow, name='my_follow'),
 ]
+
+

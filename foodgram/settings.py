@@ -7,7 +7,7 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 
 SECRET_KEY = os.getenv('SECRET_KEY')
 
-DEBUG = True
+DEBUG = os.getenv('DEBUG')
 
 ALLOWED_HOSTS = ['*']
 
@@ -27,6 +27,7 @@ INSTALLED_APPS = [
     'recipes',
     'api',
     'debug_toolbar',
+    'anymail',
 ]
 
 LOGIN_REDIRECT_URL = 'index'
@@ -132,3 +133,25 @@ MEDIA_URL = '/media/'
 MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
 
 LOGIN_URL = '/auth/login'
+
+# Email settings
+ANYMAIL = {
+    "MAILGUN_API_KEY": "3c1b36abf3c66ff0350bc04d2bcc8b89-09001d55-e9dae4a3",
+    "MAILGUN_SENDER_DOMAIN": 'mg.food-gram.ru',
+    }
+
+DEFAULT_FROM_EMAIL = 'Почтовая служба Foodgram <postmaster@mg.food-gram.ru>'
+MANAGERS = [
+    'support@food-gram.ru',
+    'postmaster@food-gram.ru',
+]
+
+EMAIL_HOST_USER = 'postmaster@mg.food-gram.ru'
+EMAIL_PORT = 587
+EMAIL_USE_TLS = True
+EMAIL_FILE_PATH = os.path.join(BASE_DIR, 'sent_emails')
+
+if DEBUG:
+    EMAIL_BACKEND = 'django.core.mail.backends.filebased.EmailBackend'
+else:
+    EMAIL_BACKEND = 'anymail.backends.mailgun.EmailBackend'
