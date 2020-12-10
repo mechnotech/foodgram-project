@@ -136,7 +136,7 @@ LOGIN_URL = '/auth/login'
 
 # Email settings
 ANYMAIL = {
-    "MAILGUN_API_KEY": "3c1b36abf3c66ff0350bc04d2bcc8b89-09001d55-e9dae4a3",
+    "MAILGUN_API_KEY": os.getenv('MAILGUN_API_KEY'),
     "MAILGUN_SENDER_DOMAIN": 'mg.food-gram.ru',
     }
 
