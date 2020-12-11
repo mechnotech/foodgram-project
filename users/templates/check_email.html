@@ -1,0 +1,26 @@
+{% extends "base.html" %}
+{% block title %}Зарегистрироваться{% endblock %}
+{% block content %}
+{# загружаем фильтр #}
+{% load user_filters %}
+
+<div class="row justify-content-center">
+    <div class="col-md-8 p-5">
+        <div class="card">
+            <div class="card-header"><b>Проверьте почту!</b></div>
+            <div class="card-body">
+                   <p class="card-text"> 
+                    Регистрация почти завершена!
+                       Пожалуйста подтвердите, что данный email <b>{{ email }}</b>
+                       принадлежит Вам (выслано письмо со ссылкой)
+                       После проверки Ваша регистрация будет завершена.
+
+                   </p>
+
+                    </div>
+            </div> <!-- card body -->
+        </div> <!-- card -->
+    </div> <!-- col -->
+</div> <!-- row -->
+
+{% endblock %}

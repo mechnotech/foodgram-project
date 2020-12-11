@@ -1,0 +1,29 @@
+{% load static %}
+
+<div class="card-user" data-author="{{ card.author.author.pk }}">
+        <div class="card-user__header">
+            <h2 class="card-user__title">{{ card.author.author.get_full_name }}</h2>
+        </div>
+        <div class="card-user__body">
+            <ul class="card-user__items">
+                {% for recipe in card.recipes_list %}
+                <li class="card-user__item">
+                    <div class="recipe">
+                        <img src="{% if recipe.image %}{{ recipe.image.url }}{% else %}{% static "images/defaultMeal.jpg" %}{% endif %}" alt="{{ recipe.description }}" class="recipe__image">
+                        <h3 class="recipe__title">{{ recipe.title }}</h3>
+                        <p class="recipe__text"><span class="icon-time"></span>{{ recipe.prepare_time }} мин.</p>
+                    </div>
+                </li>
+                {% endfor %}
+                {% if card.count %}
+                <li class="card-user__item">
+                    <a href="{%  url "profile" username=card.author.author %}" class="card-user__link link">Еще
+                        {{  card.count }} рецептов...</a>
+                </li>
+                {% endif %}
+            </ul>
+        </div>
+        <div class="author-subscribe" data-author="{{ card.author.author.pk }}">
+            <button class="button button_style_light-blue button_size_auto button_style_light-blue-outline" name="subscribe"><span class="icon-check button__icon"></span>Отписаться</button>
+        </div>
+</div>

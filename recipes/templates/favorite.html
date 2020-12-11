@@ -1,0 +1,34 @@
+{% extends "base.html" %}
+{% load static %}
+{% block css %}
+    <link rel="stylesheet" href="{% static 'pages/index.css' %}">
+{% endblock css %}
+{% block title %} Избранное {% endblock title %}
+
+{% block content %}
+    {% csrf_token %}
+
+
+        <!-- Загловок с завтрак-обед-ужин в линию -->
+        <div class="main__header">
+            <h1 class="main__title">Рецепты</h1>
+            {% include 'tags_select.html' %}
+        </div>
+        <div class="card-list">
+        {% for recipe in page %}
+                {% include "recipe_card.html" with recipe=recipe favorite_recipes=favorite_recipes %}
+        {% endfor %}
+        </div>
+
+
+{% endblock content %}
+{% block scrypt %}
+<script src="{% static 'js/config/config.js' %}"></script>
+<script src="{% static 'js/components/MainCards.js'  %}"></script>
+<script src="{% static 'js/components/Purchases.js' %}"></script>
+<script src="{% static 'js/components/Favorites.js' %}"></script>
+<script src="{% static 'js/components/CardList.js' %}"></script>
+<script src="{% static 'js/components/Header.js' %}"></script>
+<script src="{% static 'js/api/Api.js' %}"></script>
+<script src="{% static 'favorite.js' %}"></script>
+{% endblock scrypt %}

@@ -1,0 +1,19 @@
+{% extends "base.html" %}
+{% load static %}
+{% block title %}Вы вышли{% endblock %}
+{% block css %}
+    <link rel="stylesheet" href="{% static 'pages/index.css' %}">
+{% endblock css %}
+{% block content %}
+<main class="main container">
+    <div class="custom-center-block">
+            <p class="custom-text-block">Вы вышли из учетной записи. Ждем Вас снова!</p>
+        <div class="custom-button-block">
+            <form>
+            <button class="button button_style_blue" formaction="{%  url 'index' %}">Перейти на главную</button>
+            </form>
+        </div>
+    </div>
+</main>
+
+{% endblock content %}

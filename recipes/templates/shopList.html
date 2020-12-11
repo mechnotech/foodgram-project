@@ -1,0 +1,48 @@
+{% extends "base.html" %}
+{% block title %}
+    Список покупок
+{% endblock %}
+{%  load static %}
+{% block css %}
+    <link rel="stylesheet" href="{% static 'pages/shopList.css' %}">
+{% endblock css %}
+
+<body class="body">
+    <main class="main container">
+        <div class="main__header">
+            <h1 class="main__title">Список покупок</h1>
+
+        </div>
+{% block content %}
+    {% csrf_token %}
+    <div class="card-list card-list_column">
+        <ul class="shopping-list">
+
+             {% for recipe in request.user.shop_cart_list %}
+
+            <li class="shopping-list__item" data-id="{{ recipe.pk }}">
+                <div class="recipe recipe_reverse">
+                    <img src="{% if recipe.image %}{{ recipe.image.url }}{% else %}{% static "images/defaultMeal.jpg" %}{% endif %}" alt="Изображение недоступно" class="recipe__image recipe__image_big">
+                    <h3 class="recipe__title">{{ recipe.title }}</h3>
+                    <p class="recipe__text"><span class="icon-time"></span> {{ recipe.prepare_time }} мин.</p>
+                </div>
+                <a href="#" class="shopping-list__button link">Удалить</a>
+            </li>
+
+            {% endfor %}
+
+        </ul>
+
+        <a href="{% url 'downloads' %}"><button class="button button_style_blue">Скачать список</button></a>
+
+
+    </div>
+    </main>
+{% endblock content %}
+    {% block scrypt %}
+<script src="{% static 'js/config/config.js' %}"></script>
+<script src="{% static 'js/components/Header.js' %}"></script>
+<script src="{% static 'js/components/ShopList.js' %}"></script>
+<script src="{% static 'js/api/Api.js' %}"></script>
+<script src="{% static 'shopList.js' %}"></script>
+{% endblock scrypt %}

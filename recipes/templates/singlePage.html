@@ -1,0 +1,86 @@
+{% extends "base.html" %}
+
+{% load static %}
+{% block title %}
+    Рецепты
+{% endblock %}
+{% block css %}
+<link rel="stylesheet" href="{% static 'pages/single.css' %}">
+{% endblock css %}
+
+{% block content %}
+    <title>{{ recipe.title }}</title>
+    {% csrf_token %}
+    <main class="main container">
+        <div class="single-card" data-id="{{ recipe.pk }}" data-author="{{ recipe.author.pk }}">
+            <img src="{% if recipe.image %}{{ recipe.image.url }}{% else %}{% static "images/defaultMeal.jpg" %}{% endif %}" alt="Картинка недоступна" class="single-card__image">
+            <div class="single-card__info">
+                <div class="single-card__header-info">
+                    <h1 class="single-card__title">{{ recipe.title }}</h1>
+                    <div class="single-card__favorite">
+                        <button class="button button_style_none" name="favorites" data-out><span class="icon-favorite icon-favorite_big"></span></button>
+                        <div class="single-card__favorite-tooltip tooltip">Добавить в избранное</div>
+                    </div>
+                </div>
+                <ul class="single-card__items">
+                     {% for tag in recipe.render_tags %}
+                         <li class="card__item"><span class="badge badge_style_{{ tag.color }}">{{ tag.tag }}</span></li>
+                     {% endfor %}
+                </ul>
+                <div class="single-card__items single-card__items_column">
+                    <p class="single-card__text"><span class="icon-time"></span> 20 мин.</p>
+                    <ul class="single-card__items">
+                        <li class="single-card__item"><a class="single-card__text" href="{%  url "profile" username=recipe.author.username %}"><span class="icon-user"></span>{{ recipe.author.get_full_name }}</a></li>
+                        {% if user.is_authenticated and user == recipe.author %}
+                        <li class="single-card__item"><a style="margin-left: 2.5em" href="{% url 'recipe_edit' recipe_id=recipe.pk %}" class="single-card__text">Редактировать рецепт</a></li>
+                        {% if user == recipe.author %}
+                        <li class="single-card__item"><a style="margin-left: 2.5em" href="{% url 'recipe_delete' recipe_id=recipe.pk %}" class="single-card__text">Удалить</a></li>
+                        {% endif %}
+                        {% endif %}
+                    </ul>
+                </div>
+                <ul class="single-card__items">
+                    {% if user.is_authenticated %}
+                    <li class="single-card__item"><button class="button button_style_blue" name="purchases" data-out><span class="icon-plus"></span> Добавить в покупки</button></li>
+                    {% endif %}
+                    <li class="single-card__item">
+                    {% if user.is_authenticated and user != recipe.author %}
+                        {% if recipe.author.pk in user.following_list %}
+                            <button class="button button_style_light-blue button_size_auto button_style_light-blue-outline" name="subscribe"><span class="icon-check button__icon"></span>Отписаться</button>
+                        {% else %}
+                            <li class="single-card__item"><button class="button button_style_light-blue button_size_auto" name="subscribe" data-out="true">Подписаться</button>
+                        {% endif %}
+                    {% endif %}
+
+                    </li>
+                </ul>
+                <div class="single-card__section">
+                    <h3 class="single-card__section-title">Ингридиенты:</h3>
+                    <div class="single-card__items single-card__items_column">
+                        {% for ingredient in recipe.get_ingredients %}
+                         <p class=" single-card__section-item">{{ ingredient.0.title }} - {{ ingredient.1 }}
+                             {{ ingredient.0.dimension }}.</p>
+                     {% endfor %}
+                    </div>
+                </div>
+                <div class="single-card__section">
+                    <h3 class="single-card__section-title">Описание:</h3>
+                    <p class=" single-card__section-text">{{ recipe.description }}</p>
+                </div>
+            </div>
+        </div>
+    </main>
+
+{% endblock %}
+{% block scrypt %}
+    <script src="{% static 'js/config/config.js' %}"></script>
+    <script src="{% static 'js/components/Purchases.js' %}"></script>
+    <script src="{% static 'js/components/Favorites.js' %}"></script>
+    <script src="{% static 'js/components/Subscribe.js' %}"></script>
+    <script src="{% static 'js/components/MainCards.js' %}"></script>
+    <script src="{% static 'js/components/SingleCard.js' %}"></script>
+    <script src="{% static 'js/components/Header.js' %}"></script>
+    <script src="{% static 'js/api/Api.js' %}"></script>
+    <script src="{% static 'singlePage.js' %}"></script>
+{% endblock scrypt %}
+
