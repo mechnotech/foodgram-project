@@ -71,6 +71,10 @@ def new_recipe(request):
         form = RecipeForm(request.POST or None, files=request.FILES or None)
         tags = insert_tags(request.POST)
         ingredients = insert_ingredients(request.POST)
+        if not tags:
+            form.add_error('tags', 'Определите хотя бы один тэг')
+        if not ingredients:
+            form.add_error('ingredients', 'Добавьте хотя бы один ингредиент')
         if form.is_valid():
             recipe = form.save(commit=False)
             recipe.author = request.user
@@ -112,6 +116,10 @@ def recipe_edit(request, recipe_id):
                           files=request.FILES or None, instance=recipe)
         tags = insert_tags(request.POST)
         ingredients = insert_ingredients(request.POST)
+        if not tags:
+            form.add_error('tags', 'Определите хотя бы один тэг')
+        if not ingredients:
+            form.add_error('ingredients', 'Добавьте хотя бы один ингредиент')
         if form.is_valid():
             recipe.ingredients.clear()
             recipe.tags.remove()

@@ -1,17 +1,22 @@
 from django import forms
 from django.core.exceptions import ValidationError
 
-from recipes.models import Recipe
+from recipes.models import Recipe, Tag, Ingredient
 
 
 class RecipeForm(forms.ModelForm):
+    tags = forms.BooleanField(required=False)
+    ingredients = forms.BooleanField(required=False)
+    
     class Meta:
         model = Recipe
         fields = (
-            "title",
-            "prepare_time",
-            "description",
-            "image",
+            'title',
+            'prepare_time',
+            'description',
+            'image',
+            'tags',
+            'ingredients',
         )
 
     def clean_image(self):
