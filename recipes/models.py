@@ -138,9 +138,12 @@ class Follow(models.Model):
         return f'{self.user} подписан на {self.author}'
 
 
-def is_following(self, author):
-    """Проверка есть ли подписка пользователя на автора"""
-    return self.follower.filter(author=author).exists()
+def following_list(self):
+    """Возвращает список pk всех пользователей, на которых подписан этот
+    пользователь """
+    qs = self.follower.filter(user=self)
+    users_ids = qs.values_list('author', flat=True)
+    return users_ids
 
 
 def favorites_list(self):
@@ -162,7 +165,7 @@ def shop_count(self):
     return len(self.shopcart_recipes.filter(user=self))
 
 
-User.add_to_class('is_following', is_following)
+User.add_to_class('following_list', following_list)
 User.add_to_class('favorites_list', favorites_list)
 User.add_to_class('shop_cart_list', shop_cart_list)
 User.add_to_class('shop_count', shop_count)

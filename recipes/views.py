@@ -38,31 +38,20 @@ def index(request):
 
 def profile(request, username):
     author = get_object_or_404(User, username=username)
-    user = request.user
     recipes_list, tags = filter_tag(request)
     recipes_list = recipes_list.filter(author=author)
-    following = False
-    if request.user.is_authenticated:
-        following = user.is_following(author)
     page, paginator = get_paginated_view(request, recipes_list)
     return render(request, 'authorRecipe.html',
                   {'page': page,
                    'paginator': paginator,
                    'author': author,
-                   'following': following,
                    'tags': tags}
                   )
 
 
 def recipe(request, recipe_id):
     one_recipe = get_object_or_404(Recipe, pk=recipe_id)
-    following = False
-    if request.user.is_authenticated:
-        following = request.user.is_following(one_recipe.author)
-    return render(request, 'singlePage.html',
-                  {'recipe': one_recipe,
-                   'following': following}
-                  )
+    return render(request, 'singlePage.html', {'recipe': one_recipe, })
 
 
 @login_required

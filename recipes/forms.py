@@ -1,13 +1,13 @@
 from django import forms
 from django.core.exceptions import ValidationError
 
-from recipes.models import Recipe, Tag, Ingredient
+from recipes.models import Recipe
 
 
 class RecipeForm(forms.ModelForm):
     tags = forms.BooleanField(required=False)
     ingredients = forms.BooleanField(required=False)
-    
+
     class Meta:
         model = Recipe
         fields = (
