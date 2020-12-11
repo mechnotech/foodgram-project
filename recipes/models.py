@@ -7,7 +7,7 @@ User = get_user_model()
 class Tag(models.Model):
     color = models.CharField(max_length=10, blank=True, null=True, )
     tag = models.CharField(max_length=10, blank=False, null=False, )
-    slug = models.SlugField(max_length=1, blank=True, null=True, )
+    slug = models.SlugField(max_length=10, blank=True, null=True, )
 
     class Meta:
         constraints = [
