@@ -120,9 +120,9 @@ def recipe_edit(request, recipe_id):
                     recipe=recipe
                 )
             recipe.tags.set(Tag.objects.filter(slug__in=tags))
-            recipe.save()
 
-            success_save = form.save()
+
+            success_save = recipe.save()
             if success_save == 400:
                 return redirect('page_bad_request')
             return redirect('recipe', recipe_id=recipe_id)
