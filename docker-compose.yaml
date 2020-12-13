@@ -19,3 +19,35 @@ services:
       - .env
     networks:
       - database_network
+
+web:
+    image: mechnotech/foodrgam_web:latest
+    container_name: foodgram_web
+    restart: always
+    volumes:
+      - static_volume:/code/static
+    command: gunicorn foodgram.wsgi:application --workers=5 --bind 0.0.0.0:8000
+    depends_on:
+      - db
+    env_file:
+      - .env
+    networks:
+      - nginx_network
+      - database_network
+
+  nginx:
+    image: nginx:1.19.0-alpine
+    container_name: foodgram_nginx
+    volumes:
+      - type: volume
+        source: static_volume
+        target: /code/static
+      - type: bind
+        source: ./nginx/
+        target: /etc/nginx/conf.d/
+    ports:
+      - 80:80
+    depends_on:
+      - web
+    networks:
+      - nginx_network
