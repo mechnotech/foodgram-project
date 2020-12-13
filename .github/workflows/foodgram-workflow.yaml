@@ -22,8 +22,6 @@ jobs:
     - name: Lint with flake8
       run: flake8 .
 
-    - name: Test with pytest
-      run: pytest
 
   build_and_push_to_docker_hub:
     if: contains(github.ref, 'master')
