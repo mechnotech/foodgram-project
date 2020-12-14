@@ -46,10 +46,10 @@ jobs:
         id: docker_build
         uses: docker/build-push-action@v2
         with:
-          push: true
           context: .
           tags: ${{ secrets.DOCKER_REGISTRY }}/${{ secrets.MY_APP }}:latest
-#          load: true
+          load: true
+      - run: docker push ${{ secrets.DOCKER_REGISTRY }}/${{ secrets.MY_APP }}:latest
 
       - name: Image digest
         run: echo ${{ steps.docker_build.outputs.digest }}
