@@ -1,2 +1,5 @@
 static
+sent_emails
+media
 .env
+db.sqlite3

@@ -2,10 +2,11 @@ version: '3.2'
 
 volumes:
   postgres_data:
+  static_volume:
 
 networks:
-#  nginx_network:
-#    driver: bridge
+  nginx_network:
+    driver: bridge
   database_network:
     driver: bridge
 
@@ -20,8 +21,8 @@ services:
     networks:
       - database_network
 
-web:
-    image: mechnotech/foodrgam_web:latest
+  web:
+    image: mechnotech/foodgram_web:latest
     container_name: foodgram_web
     restart: always
     volumes:
