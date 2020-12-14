@@ -8,7 +8,7 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 
 SECRET_KEY = os.getenv('SECRET_KEY', default='4do52xgd31lpq')
 
-DEBUG = False if os.getenv('DEBUG') == 'False' else True
+DEBUG = True # False if os.getenv('DEBUG') == 'False' else True
 
 ALLOWED_HOSTS = ['*']
 
@@ -62,15 +62,23 @@ TEMPLATES = [
 WSGI_APPLICATION = 'foodgram.wsgi.application'
 
 DATABASES = {
-    "default": {
-        "ENGINE": os.getenv('DB_ENGINE'),
-        "NAME": os.getenv('DB_NAME'),
-        "USER": os.getenv('POSTGRES_USER'),
-        "PASSWORD": os.getenv('POSTGRES_PASSWORD'),
-        "HOST": os.getenv('DB_HOST'),
-        "PORT": os.getenv('DB_PORT'),
+    'default': {
+        'ENGINE': 'django.db.backends.sqlite3',
+        'NAME': BASE_DIR / 'db.sqlite3',
     }
 }
+
+
+# DATABASES = {
+#     "default": {
+#         "ENGINE": os.getenv('DB_ENGINE'),
+#         "NAME": os.getenv('DB_NAME'),
+#         "USER": os.getenv('POSTGRES_USER'),
+#         "PASSWORD": os.getenv('POSTGRES_PASSWORD'),
+#         "HOST": os.getenv('DB_HOST'),
+#         "PORT": os.getenv('DB_PORT'),
+#     }
+# }
 
 AUTH_PASSWORD_VALIDATORS = [
     {
@@ -147,7 +155,8 @@ else:
 
 ANYMAIL = {
     "MAILGUN_API_KEY": os.getenv('MAILGUN_API_KEY'),
-    "MAILGUN_SENDER_DOMAIN": 'mg.food-gram.ru',
+    "MAILGUN_WEBHOOK_SIGNING_KEY": os.getenv('MAILGUN_WEBHOOK_SIGNING_KEY'),
+    "MAILGUN_API_URL": "https://api.eu.mailgun.net/v3",
     }
 
 DEFAULT_FROM_EMAIL = 'Почтовая служба Foodgram <postmaster@mg.food-gram.ru>'
