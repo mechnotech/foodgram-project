@@ -49,7 +49,7 @@ jobs:
           push: true
           context: .
           tags: ${{ secrets.DOCKER_REGISTRY }}/${{ secrets.MY_APP }}:latest
-          load: true
+#          load: true
 
       - name: Image digest
         run: echo ${{ steps.docker_build.outputs.digest }}
