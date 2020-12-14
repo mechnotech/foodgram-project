@@ -3,6 +3,7 @@ version: '3.2'
 volumes:
   postgres_data:
   static_volume:
+  media_volume:
 
 networks:
   nginx_network:
@@ -27,6 +28,7 @@ services:
     restart: always
     volumes:
       - static_volume:/code/static
+      - media_volume:/code/media
     command: gunicorn foodgram.wsgi:application --workers=5 --bind 0.0.0.0:8000
     depends_on:
       - db
@@ -43,6 +45,9 @@ services:
       - type: volume
         source: static_volume
         target: /code/static
+      - type: media
+        source: media_volume
+        target: /code/media
       - type: bind
         source: ./nginx/
         target: /etc/nginx/conf.d/
