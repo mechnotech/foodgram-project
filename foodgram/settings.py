@@ -8,7 +8,7 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 
 SECRET_KEY = os.getenv('SECRET_KEY', default='4do52xgd31lpq')
 
-DEBUG = True # False if os.getenv('DEBUG') == 'False' else True
+DEBUG = True  # False if os.getenv('DEBUG') == 'False' else True
 
 ALLOWED_HOSTS = ['*']
 
@@ -68,7 +68,6 @@ DATABASES = {
     }
 }
 
-
 # DATABASES = {
 #     "default": {
 #         "ENGINE": os.getenv('DB_ENGINE'),
@@ -116,7 +115,6 @@ USE_L10N = True
 USE_TZ = True
 
 if DEBUG:
-
     INTERNAL_IPS = [
         '127.0.0.1',
     ]
@@ -157,7 +155,7 @@ ANYMAIL = {
     "MAILGUN_API_KEY": os.getenv('MAILGUN_API_KEY'),
     "MAILGUN_WEBHOOK_SIGNING_KEY": os.getenv('MAILGUN_WEBHOOK_SIGNING_KEY'),
     "MAILGUN_API_URL": "https://api.eu.mailgun.net/v3",
-    }
+}
 
 DEFAULT_FROM_EMAIL = 'Почтовая служба Foodgram <postmaster@mg.food-gram.ru>'
 MANAGERS = [
