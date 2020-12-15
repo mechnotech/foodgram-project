@@ -61,16 +61,19 @@ TEMPLATES = [
 
 WSGI_APPLICATION = 'foodgram.wsgi.application'
 
-DATABASES = {
-    "default": {
-        "ENGINE": os.getenv('DB_ENGINE'),
-        "NAME": os.getenv('DB_NAME'),
-        "USER": os.getenv('POSTGRES_USER'),
-        "PASSWORD": os.getenv('POSTGRES_PASSWORD'),
-        "HOST": os.getenv('DB_HOST'),
-        "PORT": os.getenv('DB_PORT'),
+if DEBUG:
+    pass
+else:
+    DATABASES = {
+        "default": {
+            "ENGINE": os.getenv('DB_ENGINE'),
+            "NAME": os.getenv('DB_NAME'),
+            "USER": os.getenv('POSTGRES_USER'),
+            "PASSWORD": os.getenv('POSTGRES_PASSWORD'),
+            "HOST": os.getenv('DB_HOST'),
+            "PORT": os.getenv('DB_PORT'),
+        }
     }
-}
 
 AUTH_PASSWORD_VALIDATORS = [
     {
@@ -160,3 +163,9 @@ EMAIL_HOST_USER = 'postmaster@mg.food-gram.ru'
 EMAIL_PORT = 587
 EMAIL_USE_TLS = True
 EMAIL_FILE_PATH = os.path.join(BASE_DIR, 'sent_emails')
+
+# Web interface settings
+# Максимальный размер загружаемой пользователем картинки
+IMAGE_MAX_SIZE = 4 * 1048576
+
+SHOP_LIST_FILENAME = 'Shop_List.txt'

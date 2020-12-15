@@ -5,9 +5,9 @@ User = get_user_model()
 
 
 class Tag(models.Model):
-    color = models.CharField(max_length=10, blank=True, null=True, )
-    tag = models.CharField(max_length=10, blank=False, null=False, )
-    slug = models.SlugField(max_length=10, blank=True, null=True, )
+    color = models.CharField(max_length=50, blank=True, null=True, )
+    tag = models.CharField(max_length=25, blank=False, null=False, )
+    slug = models.SlugField(max_length=25, blank=True, null=True, )
 
     class Meta:
         constraints = [
@@ -63,9 +63,6 @@ class Recipe(models.Model):
         ordering = ['-pub_date']
         verbose_name_plural = 'Рецепты'
         verbose_name = 'Рецепт'
-
-    def save(self, *args, **kwargs):
-        super().save(*args, **kwargs)
 
     def get_tags(self):
         return self.tags.only('tag')

@@ -51,7 +51,7 @@ def insert_ingredients(request_data):
     return ingredients
 
 
-def get_download_file(recipes):
+def shop_list_text(recipes):
     ingredients = recipes.values_list(
         'ingredients__title',
         'ingredients__dimension',

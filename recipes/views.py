@@ -5,11 +5,12 @@ from django.shortcuts import render, get_object_or_404, redirect
 from django.utils import timezone
 from django.views.decorators.csrf import requires_csrf_token
 
+from foodgram.settings import SHOP_LIST_FILENAME
 from .forms import RecipeForm
 from .models import Recipe, User, Follow, Tag, Quantity
 from .utils import (
     filter_tag,
-    get_download_file,
+    shop_list_text,
     insert_tags,
     insert_ingredients,
 )
@@ -185,11 +186,12 @@ def shop(request):
 @login_required
 def downloads(request):
     recipes = request.user.shop_cart_list()
-    file_text = get_download_file(recipes)
+    file_text = shop_list_text(recipes)
 
     response = HttpResponse(file_text,
                             content_type='application/text charset=utf-8')
-    response['Content-Disposition'] = 'attachment; filename="Shop_list.txt"'
+    response['Content-Disposition'] = f'attachment;' \
+                                      f' filename="{SHOP_LIST_FILENAME}"'
     return response
 
 
