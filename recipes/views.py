@@ -5,7 +5,12 @@ from django.shortcuts import render, get_object_or_404, redirect
 from django.utils import timezone
 from django.views.decorators.csrf import requires_csrf_token
 
-from foodgram.settings import SHOP_LIST_FILENAME
+from foodgram.settings import (
+    SHOP_LIST_FILENAME,
+    RECIPE_PER_FOLLOW_CARD,
+    FOLLOW_PAGE_SIZE,
+    DEFAULT_PAGE_SIZE
+)
 from .forms import RecipeForm
 from .models import Recipe, User, Follow, Tag, Quantity
 from .utils import (
@@ -16,7 +21,7 @@ from .utils import (
 )
 
 
-def get_paginated_view(request, recipe_list, page_size=6):
+def get_paginated_view(request, recipe_list, page_size=DEFAULT_PAGE_SIZE):
     paginator = Paginator(recipe_list, page_size)
     page_number = request.GET.get('page')
     page = paginator.get_page(page_number)
@@ -24,7 +29,8 @@ def get_paginated_view(request, recipe_list, page_size=6):
 
 
 def index(request):
-    recipes_list, tags = filter_tag(request)
+    tags = Tag.objects.all()
+    recipes_list = filter_tag(request, tags=tags)
     page, paginator = get_paginated_view(request, recipes_list)
     if request.user.is_authenticated:
         return render(request, 'indexAuth.html',
@@ -39,7 +45,8 @@ def index(request):
 
 def profile(request, username):
     author = get_object_or_404(User, username=username)
-    recipes_list, tags = filter_tag(request)
+    tags = Tag.objects.all()
+    recipes_list = filter_tag(request, tags=tags)
     recipes_list = recipes_list.filter(author=author)
     page, paginator = get_paginated_view(request, recipes_list)
     return render(request, 'authorRecipe.html',
@@ -47,6 +54,20 @@ def profile(request, username):
                    'paginator': paginator,
                    'author': author,
                    'tags': tags}
+                  )
+
+@login_required
+def favorite(request):
+    tags = Tag.objects.all()
+    user = request.user
+    favorites = user.favorites_list()
+    recipes_list = filter_tag(request, tags=tags, recipes_list=favorites)
+    page, paginator = get_paginated_view(request, recipes_list)
+    return render(request, 'favorite.html',
+                  {'page': page,
+                   'paginator': paginator,
+                   'tags': tags,
+                   }
                   )
 
 
@@ -57,6 +78,7 @@ def recipe(request, recipe_id):
 
 @login_required
 def new_recipe(request):
+    tags_set = Tag.objects.all
     if request.method == 'POST':
         form = RecipeForm(request.POST or None, files=request.FILES or None)
         tags = insert_tags(request.POST)
@@ -69,11 +91,7 @@ def new_recipe(request):
             recipe = form.save(commit=False)
             recipe.author = request.user
             recipe.pub_date = timezone.now()
-            success_save = recipe.save()
-
-            if success_save == 400:
-                recipe.delete()
-                return redirect('page_bad_request')
+            recipe.save()
 
             tags = insert_tags(request.POST)
             for i in ingredients:
@@ -82,21 +100,24 @@ def new_recipe(request):
                     value=i[1],
                     recipe=recipe
                 )
-            recipe.tags.set(Tag.objects.filter(slug__in=tags))
-            recipe.save()
+            recipe.tags.set(tags)
 
             return redirect('recipe', recipe_id=recipe.pk)
     else:
         form = RecipeForm(request.POST or None)
-        tags = 'l'
+        tags = get_object_or_404(Tag, pk=1)
         ingredients = None
     return render(request, 'formRecipe.html',
-                  {'form': form, 'tags': tags, 'ingredients': ingredients}
+                  {'form': form,
+                   'tags': tags,
+                   'tags_set': tags_set,
+                   'ingredients': ingredients}
                   )
 
 
 @login_required
 def recipe_edit(request, recipe_id):
+    tags_set = Tag.objects.all
     recipe = get_object_or_404(Recipe, id=recipe_id)
     if request.user != recipe.author:
         return redirect('recipe', recipe_id=recipe_id)
@@ -120,19 +141,17 @@ def recipe_edit(request, recipe_id):
                     value=i[1],
                     recipe=recipe
                 )
-            recipe.tags.set(Tag.objects.filter(slug__in=tags))
+            recipe.tags.set(tags)
+            recipe.save()
 
-            success_save = recipe.save()
-            if success_save == 400:
-                return redirect('page_bad_request')
             return redirect('recipe', recipe_id=recipe_id)
     else:
-        tags = recipe.get_tags_slug()
+        tags = recipe.tags.all()
         form = RecipeForm(instance=recipe)
         ingredients = recipe.get_ingredients()
     return render(
         request, 'formChangeRecipe.html',
-        {'form': form, 'recipe': recipe, 'tags': tags,
+        {'form': form, 'recipe': recipe, 'tags': tags, 'tags_set': tags_set,
          'ingredients': ingredients})
 
 
@@ -145,24 +164,11 @@ def recipe_delete(request, recipe_id):
     return redirect('recipe', recipe_id=recipe_id)
 
 
-@login_required
-def favorite(request):
-    user = request.user
-    favorites = user.favorites_list()
-    recipes_list, tags = filter_tag(request, favorites)
-    page, paginator = get_paginated_view(request, recipes_list)
-    return render(request, 'favorite.html',
-                  {'page': page,
-                   'paginator': paginator,
-                   'tags': tags,
-                   }
-                  )
-
 
 @login_required
 def my_follow(request):
-    page_size = 3
-    rp_per_card = 4
+    page_size = FOLLOW_PAGE_SIZE
+    rp_per_card = RECIPE_PER_FOLLOW_CARD
     authors = Follow.objects.filter(user=request.user).all()
     card_list = []
     for author in authors:
@@ -189,9 +195,10 @@ def downloads(request):
     file_text = shop_list_text(recipes)
 
     response = HttpResponse(file_text,
-                            content_type='application/text charset=utf-8')
-    response['Content-Disposition'] = f'attachment;' \
-                                      f' filename="{SHOP_LIST_FILENAME}"'
+                            content_type='application/text charset=utf-8'
+                            )
+    response['Content-Disposition'] = f'attachment;'
+    response['Content-Disposition'] += f' filename="{SHOP_LIST_FILENAME}"'
     return response
 
 

@@ -77,9 +77,9 @@ class Migration(migrations.Migration):
             name='Tag',
             fields=[
                 ('id', models.AutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID')),
-                ('color', models.CharField(blank=True, max_length=10, null=True)),
-                ('tag', models.CharField(max_length=10)),
-                ('slug', models.SlugField(blank=True, max_length=10, null=True)),
+                ('color', models.CharField(blank=True, max_length=50, null=True)),
+                ('tag', models.CharField(max_length=25)),
+                ('slug', models.SlugField(blank=True, max_length=25, null=True)),
             ],
         ),
         migrations.AddConstraint(

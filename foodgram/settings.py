@@ -62,7 +62,12 @@ TEMPLATES = [
 WSGI_APPLICATION = 'foodgram.wsgi.application'
 
 if DEBUG:
-    pass
+    DATABASES = {
+        'default': {
+            'ENGINE': 'django.db.backends.sqlite3',
+            'NAME': BASE_DIR / 'db.sqlite3',
+        }
+    }
 else:
     DATABASES = {
         "default": {
@@ -169,3 +174,6 @@ EMAIL_FILE_PATH = os.path.join(BASE_DIR, 'sent_emails')
 IMAGE_MAX_SIZE = 4 * 1048576
 
 SHOP_LIST_FILENAME = 'Shop_List.txt'
+FOLLOW_PAGE_SIZE = 3
+RECIPE_PER_FOLLOW_CARD = 4
+DEFAULT_PAGE_SIZE = 6

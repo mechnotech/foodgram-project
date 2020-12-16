@@ -15,6 +15,9 @@ class Tag(models.Model):
                                     name='tags_color_pairs')
         ]
 
+    def count(self):
+        return self.objects.count()
+
     def __str__(self):
         return self.tag
 
@@ -69,12 +72,6 @@ class Recipe(models.Model):
 
     def render_tags(self):
         return self.tags.only('tag', 'color')
-
-    def get_tags_slug(self):
-        tag = ''
-        for t in self.tags.only('slug'):
-            tag += t.slug
-        return tag
 
     def get_ingredients(self):
         ingredients = []
@@ -162,7 +159,13 @@ def shop_count(self):
     return len(self.shopcart_recipes.filter(user=self))
 
 
+def slug_list():
+    qs = Tag.objects.all()
+    return qs.values_list('slug', flat=True)
+
+
 User.add_to_class('following_list', following_list)
 User.add_to_class('favorites_list', favorites_list)
 User.add_to_class('shop_cart_list', shop_cart_list)
 User.add_to_class('shop_count', shop_count)
+Tag.add_to_class('slug_list', slug_list)
