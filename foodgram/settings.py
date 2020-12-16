@@ -22,6 +22,7 @@ INSTALLED_APPS = [
     'users',
     'recipes',
     'api',
+    'legal',
     'debug_toolbar',
     'anymail',
 ]
