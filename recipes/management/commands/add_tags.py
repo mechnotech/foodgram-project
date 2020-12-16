@@ -9,7 +9,7 @@ class Command(BaseCommand):
     help = 'Добавить список тэгов в базу (цвет и наименование)'
 
     def handle(self, *args, **options):
-        with open('recipes/fixtures/tags.csv',
+        with open('recipes/presets/tags.csv',
                   'r',
                   encoding='utf8'
                   ) as f:
