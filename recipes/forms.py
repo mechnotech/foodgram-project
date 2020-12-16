@@ -1,6 +1,7 @@
 from django import forms
 from django.core.exceptions import ValidationError
 
+from foodgram.settings import IMAGE_MAX_SIZE
 from recipes.models import Recipe
 
 
@@ -23,9 +24,9 @@ class RecipeForm(forms.ModelForm):
         image = self.cleaned_data.get('image')
         if image is None:
             return image
-        image_max_size = 4 * 1048576
+
         if image:
-            if image.size > image_max_size:
+            if image.size > IMAGE_MAX_SIZE:
                 raise ValidationError('Картинка слишком большая ( > 4Мб )')
             return image
         return image

@@ -1,31 +1,30 @@
-from recipes.models import Recipe, Ingredient
+from recipes.models import Recipe, Ingredient, Tag
 
 
-def filter_tag(request, recipes_list=None):
-    tags = request.GET.get('tags', 'bld')
+def filter_tag(request, tags, recipes_list=None):
+    if request.GET.getlist('tags'):
+        tags = Tag.objects.filter(slug__in=request.GET.getlist('tags'))
     if recipes_list:
         recipes_list = recipes_list.prefetch_related(
             'author', 'tags'
         ).filter(
-            tags__slug__in=tags
+            tags__in=tags
         ).distinct()
-        return recipes_list, tags
+        return recipes_list
     recipes_list = Recipe.objects.prefetch_related(
         'author', 'tags'
     ).filter(
-        tags__slug__in=tags
+        tags__in=tags
     ).distinct()
-    return recipes_list, tags
+    return recipes_list
 
 
 def insert_tags(request_data):
-    tags = ''
-    if request_data.get('breakfast'):
-        tags += 'b'
-    if request_data.get('lunch'):
-        tags += 'l'
-    if request_data.get('dinner'):
-        tags += 'd'
+    tags = []
+    tags_set = Tag.objects.all()
+    for tag in tags_set:
+        if request_data.get(tag.slug):
+            tags.append(tag)
     return tags
 
 
@@ -51,7 +50,7 @@ def insert_ingredients(request_data):
     return ingredients
 
 
-def get_download_file(recipes):
+def shop_list_text(recipes):
     ingredients = recipes.values_list(
         'ingredients__title',
         'ingredients__dimension',

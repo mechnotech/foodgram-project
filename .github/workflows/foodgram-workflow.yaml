@@ -88,6 +88,7 @@ jobs:
             cd foodgram
             mv ./nginx/docker-compose.yaml .
             sudo touch .env && echo "$MY_ENV" | sudo tee .env
+            sudo docker-compose pull
             sudo docker-compose up -d --remove-orphans --force-recreate
             sudo docker cp .env foodgram_web:/code/
             sudo docker exec -t foodgram_web python3 manage.py migrate

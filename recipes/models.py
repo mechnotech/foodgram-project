@@ -5,15 +5,18 @@ User = get_user_model()
 
 
 class Tag(models.Model):
-    color = models.CharField(max_length=10, blank=True, null=True, )
-    tag = models.CharField(max_length=10, blank=False, null=False, )
-    slug = models.SlugField(max_length=10, blank=True, null=True, )
+    color = models.CharField(max_length=50, blank=True, null=True, )
+    tag = models.CharField(max_length=25, blank=False, null=False, )
+    slug = models.SlugField(max_length=25, blank=True, null=True, )
 
     class Meta:
         constraints = [
             models.UniqueConstraint(fields=['tag', 'color'],
                                     name='tags_color_pairs')
         ]
+
+    def count(self):
+        return self.objects.count()
 
     def __str__(self):
         return self.tag
@@ -64,20 +67,11 @@ class Recipe(models.Model):
         verbose_name_plural = 'Рецепты'
         verbose_name = 'Рецепт'
 
-    def save(self, *args, **kwargs):
-        super().save(*args, **kwargs)
-
     def get_tags(self):
         return self.tags.only('tag')
 
     def render_tags(self):
         return self.tags.only('tag', 'color')
-
-    def get_tags_slug(self):
-        tag = ''
-        for t in self.tags.only('slug'):
-            tag += t.slug
-        return tag
 
     def get_ingredients(self):
         ingredients = []
@@ -165,7 +159,13 @@ def shop_count(self):
     return len(self.shopcart_recipes.filter(user=self))
 
 
+def slug_list():
+    qs = Tag.objects.all()
+    return qs.values_list('slug', flat=True)
+
+
 User.add_to_class('following_list', following_list)
 User.add_to_class('favorites_list', favorites_list)
 User.add_to_class('shop_cart_list', shop_cart_list)
 User.add_to_class('shop_count', shop_count)
+Tag.add_to_class('slug_list', slug_list)
