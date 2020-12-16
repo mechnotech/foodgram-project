@@ -1,0 +1,31 @@
+{% extends "base.html" %}
+{% load static %}
+{% block title %}Об авторе{% endblock %}
+{% block css %}
+    <link rel="stylesheet" href="{% static 'pages/single.css' %}">
+{% endblock css %}
+{% block content %}
+<main class="main container">
+    <div class="custom-center-block">
+         <div class="main__header">
+            <h1 class="main__title">Об авторе</h1>
+        </div>
+
+            <h1 class="single-card__text">Привет!&nbsp;</h1>
+            <p class="single-card__text">Я Евгений Шумилов и я люблю программировать на Python.</p>
+            <p class="single-card__text">Мой <a href="https://github.com/mechnotech">Github</a></p>
+            <a href="https://t.me/mechnotech" target="_blank">
+            <img src="{% static 'images/telegram.png' %}" alt="telegram" style="width: 4%;"></a>
+            <p class="single-card__text">А это мой кот:</p>
+            <p><img style="border-width: 1px; margin: 3px;" src="{% static 'images/my_cat.jpg' %}" alt="Кот убежал" width="150" height="150"></p>
+
+
+        <div class="custom-button-block">
+            <form>
+            <button class="button button_style_blue" formaction="{%  url 'index' %}">Перейти на главную</button>
+            </form>
+        </div>
+    </div>
+</main>
+
+{% endblock %}

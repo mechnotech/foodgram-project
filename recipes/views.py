@@ -56,6 +56,7 @@ def profile(request, username):
                    'tags': tags}
                   )
 
+
 @login_required
 def favorite(request):
     tags = Tag.objects.all()
@@ -164,7 +165,6 @@ def recipe_delete(request, recipe_id):
     return redirect('recipe', recipe_id=recipe_id)
 
 
-
 @login_required
 def my_follow(request):
     page_size = FOLLOW_PAGE_SIZE
@@ -197,7 +197,7 @@ def downloads(request):
     response = HttpResponse(file_text,
                             content_type='application/text charset=utf-8'
                             )
-    response['Content-Disposition'] = f'attachment;'
+    response['Content-Disposition'] = 'attachment;'
     response['Content-Disposition'] += f' filename="{SHOP_LIST_FILENAME}"'
     return response
 

@@ -9,7 +9,7 @@ class Command(BaseCommand):
     help = 'Добавить список ингредиентов в базу'
 
     def handle(self, *args, **options):
-        with open('recipes/fixtures/ingredients.csv',
+        with open('recipes/presets/ingredients.csv',
                   'r',
                   encoding='utf8'
                   ) as f:

@@ -1,0 +1,33 @@
+{% extends "base.html" %}
+{% load static %}
+{% block title %}Технологии{% endblock %}
+{% block css %}
+    <link rel="stylesheet" href="{% static 'pages/single.css' %}">
+{% endblock css %}
+{% block content %}
+<main class="main container">
+    <div class="custom-center-block">
+         <div class="main__header">
+            <h1 class="main__title" style="color: #5e9ca0;" >Технологии</h1>
+        </div>
+
+            <p class="single-card__text">При создании сайта применялся следующий стек технологий:</p>
+            <ul>
+            <li><strong>Python</strong></li>
+            <li><strong>Django</strong></li>
+            <li><strong>PostgreSQL</strong></li>
+            <li><strong>Docker</strong></li>
+                <li><strong>CI/CD Github Actions</strong></li>
+
+            </ul>
+
+
+        <div class="custom-button-block">
+            <form>
+            <button class="button button_style_blue" formaction="{%  url 'index' %}">Перейти на главную</button>
+            </form>
+        </div>
+    </div>
+</main>
+
+{% endblock %}
