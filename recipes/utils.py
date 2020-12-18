@@ -30,7 +30,6 @@ def insert_tags(request_data):
 
 def insert_ingredients(request_data):
     ingredients = []
-
     filtered = [
         request_data[key]
         for key in request_data.keys()
@@ -71,3 +70,23 @@ def shop_list_text(recipes):
         file_text += f'{" ".join(k.split("@"))} {v} \n'
 
     return file_text
+
+
+def ingredients_check(ingredients):
+    max_value = 25000
+    error = False
+    if not ingredients:
+        error = 'Добавьте хотя бы один ингредиент'
+    for _, i in ingredients:
+        try:
+            _ == int(i)
+        except ValueError:
+            error = 'Количество - только целые положительные числа'
+            break
+        if int(i) <= 0:
+            error = 'Количество не может быть нулевым или отрицательным'
+            break
+        if int(i) > max_value:
+            error = 'Количество слишком большое (нужно не больше 25000)'
+            break
+    return error

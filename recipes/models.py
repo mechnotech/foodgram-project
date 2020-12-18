@@ -1,7 +1,17 @@
 from django.contrib.auth import get_user_model
+from django.core.exceptions import ValidationError
+from django.core.validators import MinValueValidator, MaxValueValidator
 from django.db import models
 
 User = get_user_model()
+
+
+def validate_positive(value):
+    if value <= 0:
+        raise ValidationError(
+            f'{value} значение не может быть нулевым или отрицательным',
+            params={'value': value},
+        )
 
 
 class Tag(models.Model):
@@ -51,6 +61,7 @@ class Recipe(models.Model):
         'Время приготовления',
         default=10,
         help_text='Время приготовления в минутах',
+        validators=[MinValueValidator(1), MaxValueValidator(3600)]
     )
 
     description = models.TextField('Описание рецепта', max_length=2500)
@@ -76,7 +87,6 @@ class Recipe(models.Model):
     def get_ingredients(self):
         ingredients = []
         for i in self.quantity_set.only('ingredient', 'value'):
-
             ingredients.append((i.ingredient, i.value))
 
         return ingredients
@@ -86,7 +96,9 @@ class Recipe(models.Model):
 
 
 class Quantity(models.Model):
-    value = models.PositiveSmallIntegerField('Количество инградиента')
+    value = models.PositiveSmallIntegerField(
+        'Количество инградиента',
+        validators=[MinValueValidator(1), MaxValueValidator(25000)])
     recipe = models.ForeignKey(Recipe, on_delete=models.CASCADE)
     ingredient = models.ForeignKey(Ingredient, on_delete=models.CASCADE)
 

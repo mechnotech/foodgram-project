@@ -19,6 +19,10 @@
                 {% include "recipe_card.html" with recipe=recipe %}
         {% endfor %}
         </div>
+    <!-- Пагинатор -->
+        {% if page.has_other_pages %}
+            {% include "paginator.html" with items=page paginator=paginator%}
+        {% endif %}
 
 
 {% endblock content %}

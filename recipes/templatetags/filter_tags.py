@@ -19,4 +19,6 @@ def get_filter_link(request, tag):
     else:
         new_request.appendlist('tags', tag.slug)
 
+    new_request.pop('page', None)
+
     return new_request.urlencode()

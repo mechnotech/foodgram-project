@@ -22,8 +22,8 @@ class RecipeForm(forms.ModelForm):
 
     def clean_image(self):
         image = self.cleaned_data.get('image')
-        if image is None:
-            return image
+        if not image:
+            raise forms.ValidationError('Укажите e-mail для регистрации!')
 
         if image:
             if image.size > IMAGE_MAX_SIZE:

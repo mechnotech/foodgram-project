@@ -18,6 +18,7 @@ from .utils import (
     shop_list_text,
     insert_tags,
     insert_ingredients,
+    ingredients_check,
 )
 
 
@@ -84,10 +85,12 @@ def new_recipe(request):
         form = RecipeForm(request.POST or None, files=request.FILES or None)
         tags = insert_tags(request.POST)
         ingredients = insert_ingredients(request.POST)
+        ingredients_errors = ingredients_check(ingredients)
         if not tags:
             form.add_error('tags', 'Определите хотя бы один тэг')
-        if not ingredients:
-            form.add_error('ingredients', 'Добавьте хотя бы один ингредиент')
+        if ingredients_errors:
+            form.add_error('ingredients', ingredients_errors)
+
         if form.is_valid():
             recipe = form.save(commit=False)
             recipe.author = request.user
@@ -128,10 +131,12 @@ def recipe_edit(request, recipe_id):
                           files=request.FILES or None, instance=recipe)
         tags = insert_tags(request.POST)
         ingredients = insert_ingredients(request.POST)
+        ingredients_errors = ingredients_check(ingredients)
         if not tags:
             form.add_error('tags', 'Определите хотя бы один тэг')
-        if not ingredients:
-            form.add_error('ingredients', 'Добавьте хотя бы один ингредиент')
+        if ingredients_errors:
+            form.add_error('ingredients', ingredients_errors)
+
         if form.is_valid():
             recipe.ingredients.clear()
             recipe.tags.remove()
@@ -172,11 +177,11 @@ def my_follow(request):
     authors = Follow.objects.filter(user=request.user).all()
     card_list = []
     for author in authors:
-        last_four_recipes = author.author.recipes.all()[:rp_per_card]
+        last_recipes = author.author.recipes.all()[:rp_per_card]
         recipe_count = author.author.recipes.count() - rp_per_card
         card_list.append(
             {"author": author,
-             "recipes_list": last_four_recipes,
+             "recipes_list": last_recipes,
              "count": recipe_count if recipe_count > 0 else 0}
         )
     page, paginator = get_paginated_view(request, card_list, page_size)
