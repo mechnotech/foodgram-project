@@ -7,14 +7,15 @@
     <link rel="stylesheet" href="{% static 'pages/shopList.css' %}">
 {% endblock css %}
 
-<body class="body">
+
+{% block content %}
+    {% csrf_token %}
+    <body class="body">
     <main class="main container">
         <div class="main__header">
             <h1 class="main__title">Список покупок</h1>
 
         </div>
-{% block content %}
-    {% csrf_token %}
     <div class="card-list card-list_column">
         <ul class="shopping-list">
 
@@ -40,7 +41,7 @@
 
     </div>
     </main>
-{% endblock content %}
+{% endblock %}
     {% block scrypt %}
 <script src="{% static 'js/config/config.js' %}"></script>
 <script src="{% static 'js/components/Header.js' %}"></script>

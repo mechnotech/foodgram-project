@@ -63,6 +63,8 @@ def favorite(request):
     tags = Tag.objects.all()
     user = request.user
     favorites = user.favorites_list()
+    if not favorites:
+        return render(request, 'favorite.html', {'tags': tags})
     recipes_list = filter_tag(request, tags=tags, recipes_list=favorites)
     page, paginator = get_paginated_view(request, recipes_list)
     return render(request, 'favorite.html',

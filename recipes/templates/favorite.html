@@ -7,7 +7,7 @@
 
 {% block content %}
     {% csrf_token %}
-
+    <main class="main container">
 
         <!-- Загловок с завтрак-обед-ужин в линию -->
         <div class="main__header">
@@ -24,7 +24,7 @@
             {% include "paginator.html" with items=page paginator=paginator%}
         {% endif %}
 
-
+    </main>
 {% endblock content %}
 {% block scrypt %}
 <script src="{% static 'js/config/config.js' %}"></script>
